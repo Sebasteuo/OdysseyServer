@@ -1,0 +1,32 @@
+COSAS POR HACER EN EL SERVIDOR:
+        VENTANA USUARIO
+	1)Escucha conexiones entrantes por socket
+	2)Autentica usuarios
+	3)Registra Usuarios:
+		Se almacenan en un archivo JSON con estos datos :
+			Guarda Nombre de usuario (los valida como únicos)
+			Nombre y apellidos
+			Edad
+			Generos musicales
+			Contraseña
+			Amigos
+	4)Al iniciar se carga el archivo JSON en un árbol binario de búsqueda
+	5)Al registrar un usuario se actualiza este archivo y el arbol binario
+	6)Se debe guardar la contraseña encriptada con hash MD5
+        VENTANA BIBLIOTECA
+	1)Recibe archivos de audio enviados por el socket y los guarda en una carpeta definida
+	2)Se almacena la metadata de las canciones en un archivo JSON
+	3)Al iniciar el servidor se crea:
+		3.1)Realiza streaming de los archivos de audio
+		3.2)Permite actualizar la metadata de los archivos de audio según se le envíe desde el cliente, también sincroniza la metadata con el proveedor externo cuando se le indique por el cliente
+		3.3)Permite eliminar archivos de audio
+	GESTION DE AMIGOS Y RECOMENDACIONES
+	1)Administra lista de amigos de cada usuario y los muestra en el cliente
+	2)Envía recomendaciones musicales al cliente
+       
+         CONSULTAS
+	1)Al iniciar el servidor se crea ínidices para la biblioteca:
+		1.1) Nombre de la cancion (ARBOL B)
+		1.2)Nombre del artista (ARBOL AVL)
+ 		1.3)Nombre del álbum (ARBOL SPLAY)
+		1.4)Letra (CUALQUIER MECANISMO)
