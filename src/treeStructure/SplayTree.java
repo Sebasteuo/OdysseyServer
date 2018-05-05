@@ -1,6 +1,6 @@
 package treeStructure;
 
-public class SplayTree extends BinaryTree{
+public class SplayTree extends BinarySearchTree{
 	
 	public SplayTree() {
 		this.root = null;

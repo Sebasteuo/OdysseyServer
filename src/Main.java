@@ -1,10 +1,28 @@
 import treeStructure.AVLTree;
 import treeStructure.BTree;
+import treeStructure.BinarySearchTree;
 import treeStructure.SplayTree;
 
 public class Main {
 	
 	public static void main(String args[]) {
+		
+		BinarySearchTree bst = new BinarySearchTree();
+		bst.insertNode("T");
+		bst.insertNode("U");
+		bst.insertNode("V");
+		bst.insertNode("W");
+		bst.insertNode("X");
+		bst.insertNode("Y");
+		bst.insertNode("Z");
+		
+		System.out.println("Arbol BB inicial: ");
+		bst.inorder();
+		
+		bst.deleteNode("W");
+		
+		System.out.println("\nArbol BB despues de eliminar: ");
+		bst.inorder();
 		
 		AVLTree avl = new AVLTree();
 		avl.insertNode("A");
@@ -14,7 +32,7 @@ public class Main {
 		avl.insertNode("C");
 		avl.insertNode("F");		
 		
-		System.out.println("Arbol AVL inicial: ");
+		System.out.println("\nArbol AVL inicial: ");
 		avl.inorder();
 		
 		avl.deleteNode("B");
