@@ -37,7 +37,13 @@ public class SplayTree extends BinaryTree{
 	
 	@Override
 	public BinaryTreeNode searchNode(String value) {
-		return null;
+		root = splay(root, value);
+		int comparisson = value.compareToIgnoreCase(root.getValue());
+		if(comparisson == 0) {
+			return root;
+		}else {
+			return null;
+		}
 	}
 	
 	@Override 

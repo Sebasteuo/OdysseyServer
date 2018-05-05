@@ -8,7 +8,7 @@ public class AVLTree extends BinaryTree{
 	
 	@Override
 	public void insertNode(String value) {
-		insert(value, root);
+		this.root = insert(value, root);
 	}
 	
 	@Override
