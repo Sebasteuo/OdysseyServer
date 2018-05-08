@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry excluding="TreeStructures/TreeNode.java" kind="src" path="src"/>
 <<<<<<< HEAD
+<<<<<<< HEAD
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre-10.0.1">
 		<attributes>
 			<attribute name="module" value="true"/>
@@ -11,12 +12,18 @@
 =======
 	<classpathentry kind="lib" path="/Users/sebastianalba/Downloads/javax.json-1.1.jar">
 >>>>>>> b6d221fd31a99e25d8f52e77bcbad05eefe3df1b
+=======
+	<classpathentry kind="lib" path="/Users/sebastianalba/Downloads/javax.json-1.1.jar">
+>>>>>>> b6d221fd31a99e25d8f52e77bcbad05eefe3df1b
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> b6d221fd31a99e25d8f52e77bcbad05eefe3df1b
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre-10.0.1"/>
 >>>>>>> b6d221fd31a99e25d8f52e77bcbad05eefe3df1b
 	<classpathentry kind="output" path="bin"/>
