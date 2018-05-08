@@ -1,25 +1,36 @@
 package treeStructure;
 
 public class BinaryTreeNode {
+	private String key;
 	private String value;
 	private BinaryTreeNode left;
 	private BinaryTreeNode right;
 	private int height;
 	
 	public BinaryTreeNode() {
+		this.key = "";
 		this.value = "";
 		this.left = null;
 		this.right = null;
 		this.height = 0;
 	}
 	
-	public BinaryTreeNode(String value) {
+	public BinaryTreeNode(String value, String key) {
+		this.key = key;
 		this.value = value;
 		this.left = null;
 		this.right = null;
 		this.height = 0;
 	}
 	
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
+	}
+
 	public void setValue(String value) {		
 		this.value = value;
 	}

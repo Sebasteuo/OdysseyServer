@@ -7,16 +7,16 @@ public class BinarySearchTree {
 		this.root = null;
 	}
 	
-	public void insertNode(String value) {
-		this.root = insert(root, value);
+	public void insertNode(String value, String key) {
+		this.root = insert(root, value, key);
 	}
 	
-	public BinaryTreeNode searchNode(String value) {
-		return search(root, value);
+	public BinaryTreeNode searchNode(String key) {
+		return search(root, key);
 	}
 	
-	public void deleteNode(String value) {
-		delete(root, value);
+	public void deleteNode(String key) {
+		delete(root, key);
 	}
 	
 	public void setRoot(BinaryTreeNode root) {
@@ -84,33 +84,33 @@ public class BinarySearchTree {
         if (r != null)
         {
             inorder(r.getLeft());
-            System.out.print(r.getValue() +" ");
+            System.out.print(r.getValue() +"\n");
             inorder(r.getRight());
         }
     }
     
-    private BinaryTreeNode insert(BinaryTreeNode root, String value) {
+    private BinaryTreeNode insert(BinaryTreeNode root, String value, String key) {
     	if(root == null) {
-    		root = new BinaryTreeNode(value);
+    		root = new BinaryTreeNode(value, key);
     		return root;
     	}
     	int comparisson = value.compareToIgnoreCase(root.getValue());
     	if(comparisson < 0) { //El valor a insertar es menor al de la raiz
-    		root.setLeft(insert(root.getLeft(), value));    		
+    		root.setLeft(insert(root.getLeft(), value, key));    		
     	}
     	else if(comparisson > 0) { //El valor a insertar es mayor al de la raiz
-    		root.setRight(insert(root.getRight(), value));
+    		root.setRight(insert(root.getRight(), value, key));
     	}
     	//else: ya existe entonces retorna la raiz sin cambiar nada
     	return root;
     }
     
-	private BinaryTreeNode search(BinaryTreeNode r, String value) {
+	private BinaryTreeNode search(BinaryTreeNode r, String key) {
 		while(r != null) {
-			if(r.getValue() == value) {
-				break;
+			if(r.getKey().equalsIgnoreCase(key)) {
+				return r;
 			}else {
-				int comparisson = value.compareToIgnoreCase(r.getValue());
+				int comparisson = key.compareToIgnoreCase(r.getKey());
 				if(comparisson < 0) {
 					r = r.getLeft();
 				}
@@ -122,11 +122,11 @@ public class BinarySearchTree {
 		return r;
 	}
 		
-	private BinaryTreeNode delete(BinaryTreeNode r, String value) {
+	private BinaryTreeNode delete(BinaryTreeNode r, String key) {
 		if(r == null) {
 			return null;
 		}		
-		if(r.getValue() == value) {
+		if(r.getKey() == key) {
 			if(r.getLeft() == null && r.getRight() == null) { //Nodo es hoja
 				return null;
 			}
@@ -143,11 +143,11 @@ public class BinarySearchTree {
 				return r;
 			}
 		}
-		if(value.compareToIgnoreCase(r.getValue()) < 0) {
-			r.setLeft(delete(r.getLeft(), value));
+		if(key.compareToIgnoreCase(r.getKey()) < 0) {
+			r.setLeft(delete(r.getLeft(), key));
 			return r;
 		}
-		r.setRight(delete(r.getRight(), value));
+		r.setRight(delete(r.getRight(), key));
 		return r;
 	}
 }

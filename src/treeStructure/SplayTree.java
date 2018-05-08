@@ -7,9 +7,9 @@ public class SplayTree extends BinarySearchTree{
 	}
 	
 	@Override
-	public void insertNode(String value) {
+	public void insertNode(String value, String key) {
 		if(root == null) {
-			root = new BinaryTreeNode(value);
+			root = new BinaryTreeNode(value, key);
 			return;
 		}
 		
@@ -17,14 +17,14 @@ public class SplayTree extends BinarySearchTree{
 		
 		int comparisson = value.compareToIgnoreCase(root.getValue());
 		if(comparisson < 0) { //Value es menor que la raiz
-			BinaryTreeNode node = new BinaryTreeNode(value);
+			BinaryTreeNode node = new BinaryTreeNode(value, key);
 			node.setLeft(root.getLeft());
 			node.setRight(root);
 			root.setLeft(null);
 			root = node;
 		}
 		else if(comparisson > 0) {//Value es mayor que la raiz
-			BinaryTreeNode node = new BinaryTreeNode(value);
+			BinaryTreeNode node = new BinaryTreeNode(value, key);
 			node.setRight(root.getRight());
 			node.setLeft(root);
 			root.setRight(null);
@@ -36,9 +36,9 @@ public class SplayTree extends BinarySearchTree{
 	}
 	
 	@Override
-	public BinaryTreeNode searchNode(String value) {
-		root = splay(root, value);
-		int comparisson = value.compareToIgnoreCase(root.getValue());
+	public BinaryTreeNode searchNode(String key) {
+		root = splay(root, key);
+		int comparisson = key.compareToIgnoreCase(root.getKey());
 		if(comparisson == 0) {
 			return root;
 		}else {
@@ -47,14 +47,14 @@ public class SplayTree extends BinarySearchTree{
 	}
 	
 	@Override 
-	public void deleteNode(String value) {
+	public void deleteNode(String key) {
 		if(root == null) {
 			return;
 		}
 		
-		root = splay(root, value);
+		root = splay(root, key);
 		
-		int comparisson = value.compareToIgnoreCase(root.getValue());
+		int comparisson = key.compareToIgnoreCase(root.getKey());
 		
 		if(comparisson == 0) { //El nodo se encontro
 			if(root.getLeft() == null) {
@@ -62,31 +62,31 @@ public class SplayTree extends BinarySearchTree{
 			}else {
 				BinaryTreeNode node = root.getRight();
 				root = root.getLeft();
-				splay(root, value);
+				splay(root, key);
 				root.setRight(node);
 			}
 		}
 		//else: el nodo no se encontro en el arbol, no hay nada que eliminar
 	}
 	
-	private BinaryTreeNode splay(BinaryTreeNode node, String value) {
+	private BinaryTreeNode splay(BinaryTreeNode node, String key) {
 		if(node == null) {
 			return null;
 		}
 		
-		int comparisson = value.compareToIgnoreCase(node.getValue());
+		int comparisson = key.compareToIgnoreCase(node.getKey());
 		
 		if(comparisson < 0) {
 			if(node.getLeft() == null) { //El valor no esta en el arbol
 				return node;
 			}
-			int comparisson2 = value.compareToIgnoreCase(node.getLeft().getValue());
+			int comparisson2 = key.compareToIgnoreCase(node.getLeft().getKey());
 			if(comparisson2 < 0) {
-				node.getLeft().setLeft(splay(node.getLeft().getLeft(), value));
+				node.getLeft().setLeft(splay(node.getLeft().getLeft(), key));
 				node = rotateLeftLeft(node);
 			}
 			else if(comparisson2 > 0) {
-				node.getLeft().setRight(splay(node.getLeft().getRight(), value));
+				node.getLeft().setRight(splay(node.getLeft().getRight(), key));
 				if(node.getLeft().getRight() != null) {
 					node.setLeft(rotateRightRight(node.getLeft()));
 				}
@@ -101,15 +101,15 @@ public class SplayTree extends BinarySearchTree{
 			if(node.getRight() == null) {
 				return node;
 			}
-			int comparisson2 = value.compareToIgnoreCase(node.getRight().getValue());
+			int comparisson2 = key.compareToIgnoreCase(node.getRight().getKey());
 			if(comparisson2 < 0) {
-				node.getRight().setLeft(splay(node.getRight().getLeft(), value));
+				node.getRight().setLeft(splay(node.getRight().getLeft(), key));
 				if(node.getRight().getLeft() != null) {
 					node.setRight(rotateLeftLeft(node.getRight()));
 				}
 			}
 			else if(comparisson2 > 0) {
-				node.getRight().setRight(splay(node.getRight().getRight(), value));
+				node.getRight().setRight(splay(node.getRight().getRight(), key));
 				node = rotateRightRight(node);
 			}
 			if(node.getRight() == null) {

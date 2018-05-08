@@ -7,17 +7,17 @@ public class AVLTree extends BinarySearchTree{
 	}
 	
 	@Override
-	public void insertNode(String value) {
-		this.root = insert(value, root);
+	public void insertNode(String value, String key) {
+		this.root = insert(value, root, key);
 	}
 	
-	private BinaryTreeNode insert(String value, BinaryTreeNode root) {
+	private BinaryTreeNode insert(String value, BinaryTreeNode root, String key) {
 		if(root == null) {
-			root = new BinaryTreeNode(value);
+			root = new BinaryTreeNode(value, key);
 		}else{
 			int comparisson = value.compareToIgnoreCase(root.getValue()); //Negativo value es menor alfab. Positivo value es mayor alfab.
 			if(comparisson < 0) {
-				root.setLeft(insert(value, root.getLeft()));
+				root.setLeft(insert(value, root.getLeft(), key));
 				if(consultHeight(root.getLeft()) - consultHeight(root.getRight()) == 2) {					
 					if(value.compareToIgnoreCase(root.getRight().getValue()) < 0) {
 						root = rotateLeftLeft(root);
@@ -26,7 +26,7 @@ public class AVLTree extends BinarySearchTree{
 					}
 				}
 			}else if(comparisson > 0) {
-				root.setRight(insert(value, root.getRight()));
+				root.setRight(insert(value, root.getRight(), key));
 				if(consultHeight(root.getRight()) - consultHeight(root.getLeft()) == 2) {
 					if(value.compareToIgnoreCase(root.getRight().getValue()) > 0) {
 						root = rotateRightRight(root);

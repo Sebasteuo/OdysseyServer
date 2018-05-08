@@ -1,76 +1,101 @@
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.json.JsonValue;
+
 import treeStructure.AVLTree;
 import treeStructure.BTree;
 import treeStructure.BinarySearchTree;
+import treeStructure.BinaryTreeNode;
 import treeStructure.SplayTree;
+import users.ExistingUser;
+import users.NewUser;
 
 public class Main {
+	static BinarySearchTree users;
 	
-	public static void main(String args[]) {
+	public static void main(String args[]) throws IOException {
 		
-		BinarySearchTree bst = new BinarySearchTree();
-		bst.insertNode("T");
-		bst.insertNode("U");
-		bst.insertNode("V");
-		bst.insertNode("W");
-		bst.insertNode("X");
-		bst.insertNode("Y");
-		bst.insertNode("Z");
+		try {
+			/*Carga el archivo JSON en un arbol binario al iniciar el servidor */
+			users = loadFileInBST();
+			
+			/*Obtiene el json correspondiente al usuario*/
+			JsonObject object = Json.createReader(new StringReader(users.searchNode("davepj07").getValue())).readObject();	
+		}catch(NullPointerException ex) {}	
 		
-		System.out.println("Arbol BB inicial: ");
-		bst.inorder();
+		NewUser user = new NewUser();
+		user.setUserName("davepj07");
+		user.setName("David Pereira Jimenez");
+		user.setAge(21);
+		String[] msclGrs = {"Pop","Rock","Electro"};
+		user.setMusicalGenres(msclGrs);
+		user.setPassword("p455w0rd");
+		String[] fds = {"Andres", "Carla", "Jennifer"};
+		user.setFriends(fds);
+		JsonObject toInsert = user.signInUser();
+		if(toInsert != null) {
+			users.insertNode(toInsert.toString(), toInsert.getString("UserName"));
+		}
 		
-		bst.deleteNode("W");
+		NewUser user2 = new NewUser();
+		user2.setUserName("tatiipj");
+		user2.setName("Tatiana Pereira Jimenez");
+		user2.setAge(20);
+		String[] msclGrs2 = {"Reggaeton","Pop","Electro"};
+		user2.setMusicalGenres(msclGrs2);
+		user2.setPassword("p455w0rd");
+		String[] fds2 = {"Byron", "Cristian", "Karina"};
+		user2.setFriends(fds2);
+		JsonObject toInsert2 = user2.signInUser();
+		if(toInsert2 != null) {
+			users.insertNode(toInsert2.toString(), toInsert2.getString("UserName"));
+		}
 		
-		System.out.println("\nArbol BB despues de eliminar: ");
-		bst.inorder();
+		NewUser user3 = new NewUser();
+		user3.setUserName("abjs_05");
+		user3.setName("Alberto Jimenez Solano");
+		user3.setAge(43);
+		String[] msclGrs3 = {"Clasica","Pop","Instrumental"};
+		user3.setMusicalGenres(msclGrs3);
+		user3.setPassword("p455w0rd");
+		String[] fds3 = {"Carlos", "Valeria", "Andrea"};
+		user3.setFriends(fds3);
+		JsonObject toInsert3 = user3.signInUser();
+		if(toInsert3 != null) {
+			users.insertNode(toInsert3.toString(), toInsert3.getString("UserName"));
+		}
 		
-		AVLTree avl = new AVLTree();
-		avl.insertNode("A");
-		avl.insertNode("D");
-		avl.insertNode("E");
-		avl.insertNode("B");
-		avl.insertNode("C");
-		avl.insertNode("F");		
+		ExistingUser exUser = new ExistingUser("davepj07", "p455w0rd");
+		exUser.logIn(users);
+	}
+	
+	public static BinarySearchTree loadFileInBST() {
+		BinarySearchTree bst = new BinarySearchTree();	
+		try {
+			FileReader fileReader = new FileReader("usuarios.json");
 		
-		System.out.println("\nArbol AVL inicial: ");
-		avl.inorder();
-		
-		avl.deleteNode("B");
-		
-		System.out.println("\nArbol AVL despues de eliminar: ");
-		avl.inorder();
-		
-		SplayTree splay = new SplayTree();
-		splay.insertNode("G");
-		splay.insertNode("J");
-		splay.insertNode("K");
-		splay.insertNode("H");
-		splay.insertNode("I");
-		splay.insertNode("L");		
-		
-		System.out.println("\nArbol Splay inicial: ");
-		splay.inorder();
-		
-		splay.deleteNode("I");
-		
-		System.out.println("\nArbol Splay despues de eliminar: ");
-		splay.inorder();
-		
-		BTree bTree = new BTree(4);
-		bTree.insertNode("Q");
-		bTree.insertNode("R");
-		bTree.insertNode("M");
-		bTree.insertNode("N");
-		bTree.insertNode("S");
-		bTree.insertNode("O");
-		bTree.insertNode("P");
-		
-		System.out.println("\nArbol B inicial: ");
-		bTree.print(bTree.getRoot());
-		
-		bTree.deleteKey("P");
-		
-		System.out.println("\nArbol B despues de eliminar: ");
-		bTree.print(bTree.getRoot());
+			if(fileReader.ready()){	
+				InputStream IS = new FileInputStream(new File("usuarios.json"));			
+				JsonReader reader = Json.createReader(IS);			
+				JsonArray oldArray = reader.readArray();			
+				reader.close();			
+				for(JsonValue i:oldArray) {
+					bst.insertNode(i.toString(), i.asJsonObject().getString("UserName"));
+				}
+			}
+			fileReader.close();	
+			System.out.println("Arbol BB inicial: ");
+			bst.inorder();
+			return bst;
+		}catch(Exception ex) {return null;}		
 	}
 }
