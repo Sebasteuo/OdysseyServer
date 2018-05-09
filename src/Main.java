@@ -20,10 +20,9 @@ import users.ExistingUser;
 import users.NewUser;
 
 public class Main {
-	static BinarySearchTree users;
+	static BinarySearchTree users = new BinarySearchTree();
 	
-	public static void main(String args[]) throws IOException {
-		
+	public static void main(String args[]) throws IOException {		
 		try {
 			/*Carga el archivo JSON en un arbol binario al iniciar el servidor */
 			users = loadFileInBST();
@@ -34,7 +33,7 @@ public class Main {
 		
 		NewUser user = new NewUser();
 		user.setUserName("davepj07");
-		user.setName("David Pereira Jimenez");
+		user.setName("David Pereira");
 		user.setAge(21);
 		String[] msclGrs = {"Pop","Rock","Electro"};
 		user.setMusicalGenres(msclGrs);
@@ -47,10 +46,10 @@ public class Main {
 		}
 		
 		NewUser user2 = new NewUser();
-		user2.setUserName("tatiipj");
-		user2.setName("Tatiana Pereira Jimenez");
-		user2.setAge(20);
-		String[] msclGrs2 = {"Reggaeton","Pop","Electro"};
+		user2.setUserName("sebas84");
+		user2.setName("Sebastian Alba");
+		user2.setAge(21);
+		String[] msclGrs2 = {"Clasica","Pop","Electro"};
 		user2.setMusicalGenres(msclGrs2);
 		user2.setPassword("p455w0rd");
 		String[] fds2 = {"Byron", "Cristian", "Karina"};
@@ -61,9 +60,9 @@ public class Main {
 		}
 		
 		NewUser user3 = new NewUser();
-		user3.setUserName("abjs_05");
-		user3.setName("Alberto Jimenez Solano");
-		user3.setAge(43);
+		user3.setUserName("hack998");
+		user3.setName("Samuel Mendez");
+		user3.setAge(21);
 		String[] msclGrs3 = {"Clasica","Pop","Instrumental"};
 		user3.setMusicalGenres(msclGrs3);
 		user3.setPassword("p455w0rd");
@@ -74,6 +73,7 @@ public class Main {
 			users.insertNode(toInsert3.toString(), toInsert3.getString("UserName"));
 		}
 		
+		
 		ExistingUser exUser = new ExistingUser("davepj07", "p455w0rd");
 		exUser.logIn(users);
 	}
@@ -82,7 +82,6 @@ public class Main {
 		BinarySearchTree bst = new BinarySearchTree();	
 		try {
 			FileReader fileReader = new FileReader("usuarios.json");
-		
 			if(fileReader.ready()){	
 				InputStream IS = new FileInputStream(new File("usuarios.json"));			
 				JsonReader reader = Json.createReader(IS);			

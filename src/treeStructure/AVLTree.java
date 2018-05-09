@@ -15,11 +15,11 @@ public class AVLTree extends BinarySearchTree{
 		if(root == null) {
 			root = new BinaryTreeNode(value, key);
 		}else{
-			int comparisson = value.compareToIgnoreCase(root.getValue()); //Negativo value es menor alfab. Positivo value es mayor alfab.
+			int comparisson = value.compareToIgnoreCase(root.getKey()); //Negativo value es menor alfab. Positivo value es mayor alfab.
 			if(comparisson < 0) {
 				root.setLeft(insert(value, root.getLeft(), key));
 				if(consultHeight(root.getLeft()) - consultHeight(root.getRight()) == 2) {					
-					if(value.compareToIgnoreCase(root.getRight().getValue()) < 0) {
+					if(value.compareToIgnoreCase(root.getRight().getKey()) < 0) {
 						root = rotateLeftLeft(root);
 					}else {
 						root = rotateRightLeft(root);
@@ -28,7 +28,7 @@ public class AVLTree extends BinarySearchTree{
 			}else if(comparisson > 0) {
 				root.setRight(insert(value, root.getRight(), key));
 				if(consultHeight(root.getRight()) - consultHeight(root.getLeft()) == 2) {
-					if(value.compareToIgnoreCase(root.getRight().getValue()) > 0) {
+					if(value.compareToIgnoreCase(root.getRight().getKey()) > 0) {
 						root = rotateRightRight(root);
 					}else {
 						root = rotateLeftRight(root);

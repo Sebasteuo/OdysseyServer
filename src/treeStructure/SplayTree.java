@@ -13,9 +13,9 @@ public class SplayTree extends BinarySearchTree{
 			return;
 		}
 		
-		root = splay(root, value);
+		root = splay(root, key);
 		
-		int comparisson = value.compareToIgnoreCase(root.getValue());
+		int comparisson = value.compareToIgnoreCase(root.getKey());
 		if(comparisson < 0) { //Value es menor que la raiz
 			BinaryTreeNode node = new BinaryTreeNode(value, key);
 			node.setLeft(root.getLeft());
@@ -31,7 +31,7 @@ public class SplayTree extends BinarySearchTree{
 			root = node;
 		}
 		else {//Value es igual que la raiz solo actualiza el valor
-			root.setValue(value);
+			root.setKey(key);
 		}
 	}
 	

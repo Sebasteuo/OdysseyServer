@@ -2,43 +2,43 @@ package treeStructure;
 
 public class BinarySearchTree {
 	protected BinaryTreeNode root;
-	
+
 	public BinarySearchTree() {
 		this.root = null;
 	}
-	
+
 	public void insertNode(String value, String key) {
 		this.root = insert(root, value, key);
 	}
-	
+
 	public BinaryTreeNode searchNode(String key) {
 		return search(root, key);
 	}
-	
+
 	public void deleteNode(String key) {
 		delete(root, key);
 	}
-	
+
 	public void setRoot(BinaryTreeNode root) {
 		this.root = root;
 	}
-	
+
 	public BinaryTreeNode getRoot() {
 		return this.root;
 	}
-	
+
 	public boolean isEmpty() {
 		return root == null;
 	}
-	
+
 	public void makeTreeEmpty() {
 		this.root = null;
 	}
-	
+
 	public int consultHeight(BinaryTreeNode node) {
 		return node == null? -1 : node.getHeight();
 	}
-	
+
 	public int getMax(int value1, int value2) {
 		return value1 > value2? value1 : value2;
 	}
@@ -46,12 +46,11 @@ public class BinarySearchTree {
 	public String findMin(BinaryTreeNode node) {
 		return node.getLeft() == null? node.getValue() : findMin(node.getLeft());
 	}
-	
 		
     public void inorder(){
         inorder(root);
     }
-	
+
     public BinaryTreeNode rotateLeftLeft(BinaryTreeNode k2) {
 		BinaryTreeNode k1 = k2.getLeft();
 		k2.setLeft(k1.getRight());
@@ -60,7 +59,7 @@ public class BinarySearchTree {
 		k1.setHeight(getMax(consultHeight(k1.getLeft()), consultHeight(k1.getRight())) + 1);
 		return k1;
 	}
-	
+
     public BinaryTreeNode rotateRightRight(BinaryTreeNode k1) {
 		BinaryTreeNode k2 = k1.getRight();
 		k1.setRight(k2.getLeft());
@@ -69,31 +68,31 @@ public class BinarySearchTree {
 		k2.setHeight(getMax(consultHeight(k2.getLeft()), consultHeight(k2.getRight())) + 1);
 		return k2;
 	}
-	
+
     public BinaryTreeNode rotateRightLeft(BinaryTreeNode k3) {
 		k3.setLeft(rotateRightRight(k3.getLeft()));
 		return rotateLeftLeft(k3);
 	}
-	
+
     public BinaryTreeNode rotateLeftRight(BinaryTreeNode k3) {
 		k3.setRight(rotateLeftLeft(k3.getRight()));
 		return rotateRightRight(k3);
 	}
 
     private void inorder(BinaryTreeNode r){
-        if (r != null)
-        {
+        if (r != null){
             inorder(r.getLeft());
             System.out.print(r.getValue() +"\n");
             inorder(r.getRight());
         }
     }
-    
+
     private BinaryTreeNode insert(BinaryTreeNode root, String value, String key) {
     	if(root == null) {
     		root = new BinaryTreeNode(value, key);
     		return root;
     	}
+    	
     	int comparisson = value.compareToIgnoreCase(root.getValue());
     	if(comparisson < 0) { //El valor a insertar es menor al de la raiz
     		root.setLeft(insert(root.getLeft(), value, key));    		
@@ -126,6 +125,7 @@ public class BinarySearchTree {
 		if(r == null) {
 			return null;
 		}		
+
 		if(r.getKey() == key) {
 			if(r.getLeft() == null && r.getRight() == null) { //Nodo es hoja
 				return null;
