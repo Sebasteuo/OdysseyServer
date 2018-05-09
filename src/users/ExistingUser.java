@@ -34,7 +34,7 @@ public class ExistingUser {
 		}		
 	}
 	
-	public String encodePassword(String password) throws Exception {
+	private String encodePassword(String password) throws Exception {
 		MessageDigest md = MessageDigest.getInstance("MD5");
 		md.update(password.getBytes());
 		
