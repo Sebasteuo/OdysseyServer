@@ -69,7 +69,7 @@ public class NewUser {
 		try {
 			FileReader fileReader = new FileReader("usuarios.json");
 		
-			if(fileReader.ready()){	
+			if(fileReader.ready()){
 				InputStream IS = new FileInputStream(new File("usuarios.json"));			
 				JsonReader reader = Json.createReader(IS);			
 				JsonArray oldArray = reader.readArray();			
@@ -87,12 +87,13 @@ public class NewUser {
 		}catch(Exception ex) {}
 		
 		ots =  new FileOutputStream("usuarios.json");
-		arrayBuilder.add(userBuilder.build());
-		users = arrayBuilder.build();
+		JsonObject user = userBuilder.build();
+		arrayBuilder.add(user);
+		users = arrayBuilder.build();		
 		JsonWriter jsonWriter = Json.createWriter(ots);
 		jsonWriter.writeArray(users);
 		jsonWriter.close();
 		
-		return userBuilder.build();
+		return user;
 	}
 }

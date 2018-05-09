@@ -23,6 +23,7 @@ public class Main {
 	static BinarySearchTree users = new BinarySearchTree();
 	
 	public static void main(String args[]) throws IOException {		
+		
 		try {
 			/*Carga el archivo JSON en un arbol binario al iniciar el servidor */
 			users = loadFileInBST();
@@ -42,7 +43,7 @@ public class Main {
 		user.setFriends(fds);
 		JsonObject toInsert = user.signInUser();
 		if(toInsert != null) {
-			users.insertNode(toInsert.toString(), toInsert.getString("UserName"));
+			users.insertNode(toInsert.toString(), toInsert.getString("UserName"));			
 		}
 		
 		NewUser user2 = new NewUser();
@@ -56,7 +57,7 @@ public class Main {
 		user2.setFriends(fds2);
 		JsonObject toInsert2 = user2.signInUser();
 		if(toInsert2 != null) {
-			users.insertNode(toInsert2.toString(), toInsert2.getString("UserName"));
+			users.insertNode(toInsert2.toString(), toInsert2.getString("UserName"));			
 		}
 		
 		NewUser user3 = new NewUser();
@@ -70,9 +71,8 @@ public class Main {
 		user3.setFriends(fds3);
 		JsonObject toInsert3 = user3.signInUser();
 		if(toInsert3 != null) {
-			users.insertNode(toInsert3.toString(), toInsert3.getString("UserName"));
-		}
-		
+			users.insertNode(toInsert3.toString(), toInsert3.getString("UserName"));			
+		}		
 		
 		ExistingUser exUser = new ExistingUser("davepj07", "p455w0rd");
 		exUser.logIn(users);
@@ -95,6 +95,8 @@ public class Main {
 			System.out.println("Arbol BB inicial: ");
 			bst.inorder();
 			return bst;
-		}catch(Exception ex) {return null;}		
+		}catch(Exception ex) {
+			return bst;
+		}		
 	}
 }
