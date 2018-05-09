@@ -22,7 +22,7 @@ import users.NewUser;
 public class Main {
 	static BinarySearchTree users = new BinarySearchTree();
 	
-	public static void main(String args[]) throws IOException {		
+	public static void main(String args[]) throws Exception {		
 		
 		try {
 			/*Carga el archivo JSON en un arbol binario al iniciar el servidor */
@@ -42,6 +42,7 @@ public class Main {
 		String[] fds = {"Andres", "Carla", "Jennifer"};
 		user.setFriends(fds);
 		JsonObject toInsert = user.signInUser();
+		System.out.println(toInsert.toString());
 		if(toInsert != null) {
 			users.insertNode(toInsert.toString(), toInsert.getString("UserName"));			
 		}

@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.MessageDigest;
 
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -54,7 +55,8 @@ public class NewUser {
 		userBuilder.add("MusicalGenres", musicalGenresBuilder);
 	}
 	
-	public void setPassword(String password) {
+	public void setPassword(String password) throws Exception {
+		password = encodePassword(password);
 		userBuilder.add("Password", password);
 	}
 	
@@ -95,5 +97,23 @@ public class NewUser {
 		jsonWriter.close();
 		
 		return user;
+	}
+	
+	private String encodePassword(String password) throws Exception {
+		MessageDigest md = MessageDigest.getInstance("MD5");
+		md.update(password.getBytes());
+		
+		byte[] byteData = md.digest();
+		
+		StringBuffer hexaString = new StringBuffer();
+		for(int i = 0; i < byteData.length; i++) {
+			String hexa = Integer.toHexString(0xff & byteData[i]);
+			if(hexa.length() == 1) {
+				hexaString.append("0");
+			}
+			hexaString.append(hexa);
+		}
+		
+		return hexaString.toString();
 	}
 }
