@@ -80,7 +80,7 @@ public class NewUser {
 					if(!i.asJsonObject().getString("UserName").equals(this.userName)) { //Autentica que el usuario no exista registrado
 						arrayBuilder.add(i);
 					}else {
-						System.out.println("\nERROR: El usuario ya existe!");				
+						System.out.println("ERROR: El usuario ya existe!");				
 						return null;
 					}
 				}

@@ -11,6 +11,7 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonValue;
 
+import musicLibrary.MusicLibrary;
 import treeStructure.AVLTree;
 import treeStructure.BTree;
 import treeStructure.BinarySearchTree;
@@ -24,11 +25,11 @@ public class Main {
 	
 	public static void main(String args[]) throws Exception {		
 		
-		try {
-			/*Carga el archivo JSON en un arbol binario al iniciar el servidor */
+		/*try {
+			//Carga el archivo JSON en un arbol binario al iniciar el servidor
 			users = loadFileInBST();
 			
-			/*Obtiene el json correspondiente al usuario*/
+			//Obtiene el json correspondiente al usuario
 			JsonObject object = Json.createReader(new StringReader(users.searchNode("davepj07").getValue())).readObject();	
 		}catch(NullPointerException ex) {}	
 		
@@ -76,7 +77,10 @@ public class Main {
 		}		
 		
 		ExistingUser exUser = new ExistingUser("davepj07", "p455w0rd");
-		exUser.logIn(users);
+		exUser.logIn(users);*/
+		
+		MusicLibrary mL = new MusicLibrary("Daisy", "https://dl.last.fm/static/1526050792/138298282/c31883578d6a1d7c0b7e95938a453eb7ecc8f36bb12cf044e5bcba53fdf895ab/Lifetheory+-+Daisy.mp3");
+		mL.storeSong();
 	}
 	
 	public static BinarySearchTree loadFileInBST() {
