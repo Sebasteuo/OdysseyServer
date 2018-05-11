@@ -43,6 +43,10 @@ public class MusicLibrary {
 	
 	public void storeSong() throws Exception{
 		String home = System.getProperty("user.home");
+		File folder = new File(home + "\\Documents\\MusicLibrary");
+		if(!folder.exists()) {
+			folder.mkdirs();
+		}
 		File file = new File(home + "\\Documents\\MusicLibrary\\" + this.songName + ".mp3");
 		if(!file.exists()) {
 			InputStream IS = this.connection.getInputStream(); //Obtiene los datos recibidos por el url
