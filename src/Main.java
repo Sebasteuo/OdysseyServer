@@ -79,8 +79,8 @@ public class Main {
 		ExistingUser exUser = new ExistingUser("davepj07", "p455w0rd");
 		exUser.logIn(users);*/
 		
-		MusicLibrary mL = new MusicLibrary("Daisy", "https://dl.last.fm/static/1526050792/138298282/c31883578d6a1d7c0b7e95938a453eb7ecc8f36bb12cf044e5bcba53fdf895ab/Lifetheory+-+Daisy.mp3");
-		mL.storeSong();
+		MusicLibrary mL = new MusicLibrary();
+		mL.storeSong("Daisy", "https://dl.last.fm/static/1526050792/138298282/c31883578d6a1d7c0b7e95938a453eb7ecc8f36bb12cf044e5bcba53fdf895ab/Lifetheory+-+Daisy.mp3");
 	}
 	
 	public static BinarySearchTree loadFileInBST() {

@@ -27,30 +27,30 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class MusicLibrary {
-	URLConnection connection;
-	String songName;
 	JsonObjectBuilder objBuilder;
 	JsonArrayBuilder arrBuilder;
 	JsonArray finalArray;
 	
+	File folder; //Carpeta donde se almacenaran las canciones
+	String home = System.getProperty("user.home"); //Obtiene la ruta principal del sistema (C://user//xxxx//)
+	String jsonDocPath = home + "\\Documents\\MusicLibrary\\MusicLibrary.json"; //Ruta de acceso al JsonDoc
 	
-	public MusicLibrary(String songName, String url) throws Exception {		
-		this.songName = songName;
-		this.connection = new URL(url).openConnection();
+	public MusicLibrary() throws Exception {
 		this.objBuilder = Json.createObjectBuilder();
 		this.arrBuilder = Json.createArrayBuilder();
+		
+		this.folder = new File(home + "\\Documents\\MusicLibrary");
+		if(!this.folder.exists()) { //Crea la carpeta en caso de que no exista
+			this.folder.mkdirs();
+		}
 	}
 	
-	public void storeSong() throws Exception{
-		String home = System.getProperty("user.home");
-		File folder = new File(home + "\\Documents\\MusicLibrary");
-		if(!folder.exists()) {
-			folder.mkdirs();
-		}
-		File file = new File(home + "\\Documents\\MusicLibrary\\" + this.songName + ".mp3");
-		if(!file.exists()) {
-			InputStream IS = this.connection.getInputStream(); //Obtiene los datos recibidos por el url
-			OutputStream OS = new FileOutputStream(file); //Crea el archivo para escribir la informacion
+	public void storeSong(String songName, String url) throws Exception{	
+		URLConnection connection = new URL(url).openConnection();
+		File song = new File(home + "\\Documents\\MusicLibrary\\" + songName + ".mp3"); //Crea el archivo donde se guardara la cancion
+		if(!song.exists()) { //Comprueba si la cancion ya existe en el directorio
+			InputStream IS = connection.getInputStream(); //Obtiene los datos recibidos por el url
+			OutputStream OS = new FileOutputStream(song); //Convierte el archivo en editable para escribir la informacion
 			
 			byte[] buffer = new byte[4096]; 
 			int length;
@@ -59,26 +59,29 @@ public class MusicLibrary {
 			}
 			System.out.println("Download Complete!");
 			OS.close(); //Cierra el archivo 
-			this.saveMetadata(file, home);
+			this.saveMetadata(song); //Llama al metodo para guardar la metadata de la cancion
 		}else {
 			System.out.println("ERROR: La cancion ya se encuentra en la biblioteca.");
 			return;
 		}		
 	}
 	
-	public void saveMetadata(File file, String home) throws Exception {
-		InputStream IS = new FileInputStream(file);
+	public void updateMetadata() {
+		
+	}
+	
+	private void saveMetadata(File song) throws Exception {
+		InputStream IS = new FileInputStream(song);
 		ContentHandler handler = new DefaultHandler();
 		Metadata metadata = new Metadata();
 		Parser parser = new Mp3Parser();
 		ParseContext parseCtx = new ParseContext();
 		parser.parse(IS, handler, metadata, parseCtx);
 		IS.close();
-		
 		try {
-			FileReader fileReader = new FileReader(home + "\\Documents\\MusicLibrary\\MusicLibrary.json");
+			FileReader fileReader = new FileReader(jsonDocPath);
 			if(fileReader.ready()) {
-				InputStream tempIS = new FileInputStream(new File(home + "\\Documents\\MusicLibrary\\MusicLibrary.json"));			
+				InputStream tempIS = new FileInputStream(new File(jsonDocPath));			
 				JsonReader reader = Json.createReader(tempIS);			
 				JsonArray oldArray = reader.readArray();			
 				reader.close();			
@@ -95,7 +98,7 @@ public class MusicLibrary {
 		try{objBuilder.add("Genre", metadata.get("xmpDM:genre")).toString();}catch(NullPointerException ex) {objBuilder.add("Genre", "Unknown");}
 		try{objBuilder.add("Album", metadata.get("xmpDM:album")).toString();}catch(NullPointerException ex) {objBuilder.add("Album", "Unknown");}
 		
-		OutputStream OS = new FileOutputStream(home +"\\Documents\\MusicLibrary\\MusicLibrary.json");
+		OutputStream OS = new FileOutputStream(jsonDocPath);
 		JsonObject obj = objBuilder.build();
 		arrBuilder.add(obj);
 		finalArray = arrBuilder.build();
