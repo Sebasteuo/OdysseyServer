@@ -3,6 +3,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 import javax.json.JsonObject;
+import users.ExistingUser;
 
 import treeStructure.BinarySearchTree;
 import users.NewUser;
@@ -17,6 +18,12 @@ public class Sockets {
 			PrintWriter pw = new PrintWriter(client.getOutputStream(), true);
 			String name = scanner.nextLine();
 			System.out.println(name);
+			if (name.substring(0,1).equals("0")) {
+				ExistingUser a = new ExistingUser("","");
+				String b = a.getExistingUserNames();
+				String xml = "<b> Usuarios existentes: </b>";
+				pw.println(xml);
+			}
 			if (name.substring(0, 1).equals("1")) {
 				if ("hola".equals("hola")) {
 					String xml = "<true> Apodo libre </true>";
