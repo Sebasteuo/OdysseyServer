@@ -78,10 +78,10 @@ public class Main {
 		
 		ExistingUser exUser = new ExistingUser("davepj07", "p455w0rd");
 		exUser.logIn(users);
-		//String[] message = {"dave","hack998","sebas esta dormido"};
+		//String[] message = {"dave","hack998","sebas se volvio a dormir"};
 		//exUser.addMessages(message);
-		String[] friend = {"davepj07", "Alisson"};
-		exUser.addFriends(friend);
+		//String[] friend = {"davepj07", "Alisson"};
+		//exUser.addFriends(friend);
 		//Sockets.conectar(users);
 		
 		/*MusicLibrary mL = new MusicLibrary();

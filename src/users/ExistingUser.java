@@ -122,32 +122,6 @@ public class ExistingUser {
 		}
 	}
 	
-	private boolean friendAlreadyExists(String userName, String friend) throws Exception {		
-		JsonArray array = readJsonFile();
-		for(int i = 0; i < array.size(); i++) {
-			JsonObject obj = array.getJsonObject(i);
-			if(obj.getString("UserName").equalsIgnoreCase(userName)) {
-				JsonArray friends = obj.getJsonArray("Friends");
-				for(int j = 0; j < friends.size(); j++) {
-					if(friends.getString(j).equalsIgnoreCase(friend)) {
-						return true;
-					}
-				}
-			}			
-		}
-		return false;
-	}
-	
-	private boolean userNameExists(String userName) throws Exception {
-		JsonArray array = readJsonFile();
-		for(int i = 0; i < array.size(); i++) {
-			JsonObject obj = array.getJsonObject(i);
-			if(obj.getString("UserName").equalsIgnoreCase(userName)) {
-				return true;
-			}
-		}
-		return false;
-	}
 	public String getExistingUserNames() throws Exception {
 		JsonArray array = readJsonFile();
 		String existingUsers = "";
@@ -171,6 +145,22 @@ public class ExistingUser {
 			}			
 		}
 		return friendsList;
+	}
+	
+	public String getMessagesList(String userName) throws Exception {
+		JsonArray array = readJsonFile();
+		String messageList = "";
+		for(int i = 0; i < array.size(); i++) {
+			JsonObject obj = array.getJsonObject(i);
+			if(obj.getString("UserName").equalsIgnoreCase(userName)) {
+				JsonArray messages = obj.getJsonArray("Messages");
+				for(int j = 0; j < messages.size(); j++) {
+					JsonObject msg = messages.getJsonObject(j);
+					messageList += msg.getString("Emisor") + "/" + msg.getString("Message") + "/";
+				}
+			}			
+		}
+		return messageList;
 	}
 	
 	private String encodePassword(String password) throws Exception {
@@ -199,5 +189,32 @@ public class ExistingUser {
 		JsonArray array = reader.readArray();
 		reader.close();
 		return array;
+	}
+	
+	private boolean friendAlreadyExists(String userName, String friend) throws Exception {		
+		JsonArray array = readJsonFile();
+		for(int i = 0; i < array.size(); i++) {
+			JsonObject obj = array.getJsonObject(i);
+			if(obj.getString("UserName").equalsIgnoreCase(userName)) {
+				JsonArray friends = obj.getJsonArray("Friends");
+				for(int j = 0; j < friends.size(); j++) {
+					if(friends.getString(j).equalsIgnoreCase(friend)) {
+						return true;
+					}
+				}
+			}			
+		}
+		return false;
+	}
+	
+	private boolean userNameExists(String userName) throws Exception {
+		JsonArray array = readJsonFile();
+		for(int i = 0; i < array.size(); i++) {
+			JsonObject obj = array.getJsonObject(i);
+			if(obj.getString("UserName").equalsIgnoreCase(userName)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
