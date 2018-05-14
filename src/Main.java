@@ -69,7 +69,7 @@ public class Main {
 		String[] msclGrs3 = {"Clasica","Pop","Instrumental"};
 		user3.setMusicalGenres(msclGrs3);
 		user3.setPassword("p455w0rd");
-		String[] fds3 = {"Carlos", "Valeria", "Andrea"};
+		String[] fds3 = {"Carlos", "sebas84", "Andrea"};
 		user3.setFriends(fds3);
 		JsonObject toInsert3 = user3.signInUser();
 		if(toInsert3 != null) {
