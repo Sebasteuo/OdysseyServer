@@ -3,11 +3,13 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 import javax.json.JsonObject;
+
+import treeStructure.BinarySearchTree;
 import users.NewUser;
 
 public class Sockets {
-	public static void conectar() throws Exception {
-		ServerSocket serversocket = new ServerSocket(113, 10);
+	public static void conectar(BinarySearchTree users) throws Exception {
+		ServerSocket serversocket = new ServerSocket(8000);
 		System.out.println("Listo");
 		while (true) {
 			Socket client = serversocket.accept();

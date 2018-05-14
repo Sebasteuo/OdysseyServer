@@ -160,7 +160,7 @@ public class MusicLibrary {
 		}catch(NullPointerException ex) {
 			objBuilder.add("Genre", "Unknown");
 			tag.setGenreDescription("Rock");
-			change = true;
+			change = true;		
 		}
 		try{
 			objBuilder.add("Album", tag.getAlbum()).toString();
