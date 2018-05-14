@@ -19,35 +19,32 @@ import javax.json.JsonReader;
 import javax.json.JsonValue;
 import javax.json.JsonWriter;
 
-import org.apache.tika.metadata.Metadata;
-import org.apache.tika.parser.ParseContext;
-import org.apache.tika.parser.Parser;
-import org.apache.tika.parser.mp3.Mp3Parser;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.helpers.DefaultHandler;
+import com.mpatric.mp3agic.ID3v2;
+import com.mpatric.mp3agic.ID3v24Tag;
+import com.mpatric.mp3agic.Mp3File;
 
 public class MusicLibrary {
 	JsonObjectBuilder objBuilder;
 	JsonArrayBuilder arrBuilder;
 	JsonArray finalArray;
 	
-	File folder; //Carpeta donde se almacenaran las canciones
 	String home = System.getProperty("user.home"); //Obtiene la ruta principal del sistema (C://user//xxxx//)
+	String folderPath = home + "\\Documents\\MusicLibrary\\"; //Ruta donde se almacenaran las canciones
 	String jsonDocPath = home + "\\Documents\\MusicLibrary\\MusicLibrary.json"; //Ruta de acceso al JsonDoc
 	
 	public MusicLibrary() throws Exception {
 		this.objBuilder = Json.createObjectBuilder();
 		this.arrBuilder = Json.createArrayBuilder();
 		
-		this.folder = new File(home + "\\Documents\\MusicLibrary");
-		if(!this.folder.exists()) { //Crea la carpeta en caso de que no exista
-			this.folder.mkdirs();
+		File folder = new File(folderPath);
+		if(!folder.exists()) { //Crea la carpeta en caso de que no exista
+			folder.mkdirs();
 		}
 	}
 	
 	public void storeSong(String songName, String url) throws Exception{	
 		URLConnection connection = new URL(url).openConnection();
-		File song = new File(home + "\\Documents\\MusicLibrary\\" + songName + ".mp3"); //Crea el archivo donde se guardara la cancion
+		File song = new File(folderPath + songName + ".mp3"); //Crea el archivo donde se guardara la cancion
 		if(!song.exists()) { //Comprueba si la cancion ya existe en el directorio
 			InputStream IS = connection.getInputStream(); //Obtiene los datos recibidos por el url
 			OutputStream OS = new FileOutputStream(song); //Convierte el archivo en editable para escribir la informacion
@@ -66,18 +63,62 @@ public class MusicLibrary {
 		}		
 	}
 	
-	public void updateMetadata() {
+	public void updateMetadata(File song, String[] metadata) throws Exception {
+		Mp3File mp3File = new Mp3File(song);
+		ID3v2 tag = mp3File.getId3v2Tag();
+		boolean change = false;
 		
+		if(!tag.getTitle().equalsIgnoreCase(metadata[0])) {
+			tag.setTitle(metadata[0]);	
+			change = true;
+		}
+		if(!tag.getArtist().equalsIgnoreCase(metadata[1])) {
+			tag.setArtist(metadata[1]);
+			change = true;
+		}
+		if(!tag.getComposer().equalsIgnoreCase(metadata[2])) {
+			tag.setComposer(metadata[2]);
+			change = true;
+		}
+		if(!tag.getGenreDescription().equalsIgnoreCase(metadata[3])) {
+			tag.setGenreDescription(metadata[3]);
+			change = true;
+		}
+		if(!tag.getAlbum().equalsIgnoreCase(metadata[4])) {
+			tag.setAlbum(metadata[4]);
+			change = true;
+		}
+		
+		if(change == true) {
+			System.out.println("Entro");
+			tag.setPadding(true);
+			mp3File.save(mp3File.getFilename() + ".retag");
+			renameFiles(mp3File);
+			editJsonDoc(tag.getTitle(), tag);
+		}
+	}
+	
+	public void printMetadata(File song) throws Exception {		
+		Mp3File file = new Mp3File(song);
+		ID3v2 tag = file.getId3v2Tag();
+    	System.out.println("Title: " + tag.getTitle());
+    	System.out.println("Artist: " + tag.getArtist());
+    	System.out.println("Composer: " + tag.getComposer());
+    	System.out.println("Album: " + tag.getAlbum());
+    	System.out.println("Genre: " + tag.getGenre() + " (" + tag.getGenreDescription() + ")");
 	}
 	
 	private void saveMetadata(File song) throws Exception {
-		InputStream IS = new FileInputStream(song);
-		ContentHandler handler = new DefaultHandler();
-		Metadata metadata = new Metadata();
-		Parser parser = new Mp3Parser();
-		ParseContext parseCtx = new ParseContext();
-		parser.parse(IS, handler, metadata, parseCtx);
-		IS.close();
+		Mp3File mp3File = new Mp3File(song);
+		
+		ID3v2 tag;
+		if(mp3File.hasId3v2Tag()) {
+			tag = mp3File.getId3v2Tag();
+		}else {
+			tag = new ID3v24Tag();
+			mp3File.setId3v2Tag(tag);
+		}
+		
 		try {
 			FileReader fileReader = new FileReader(jsonDocPath);
 			if(fileReader.ready()) {
@@ -91,12 +132,49 @@ public class MusicLibrary {
 			}
 			fileReader.close();
 		}catch(FileNotFoundException ex) {}
-				
-		try{objBuilder.add("Title", metadata.get("title")).toString();}catch(NullPointerException ex) {objBuilder.add("Title", "Unknown");}
-		try{objBuilder.add("Artist", metadata.get("xmpDM:artist")).toString();}catch(NullPointerException ex) {objBuilder.add("Artist", "Unknown");}
-		try{objBuilder.add("Composer", metadata.get("xmpDM:composer")).toString();}catch(NullPointerException ex) {objBuilder.add("Composer", "Unknown");}
-		try{objBuilder.add("Genre", metadata.get("xmpDM:genre")).toString();}catch(NullPointerException ex) {objBuilder.add("Genre", "Unknown");}
-		try{objBuilder.add("Album", metadata.get("xmpDM:album")).toString();}catch(NullPointerException ex) {objBuilder.add("Album", "Unknown");}
+		
+		boolean change = false;
+		try{
+			objBuilder.add("Title", tag.getTitle()).toString();
+		}catch(NullPointerException ex) {
+			objBuilder.add("Title", "Unknown");
+			tag.setTitle("Unknown");
+			change = true;
+		}
+		try{
+			objBuilder.add("Artist", tag.getArtist()).toString();
+		}catch(NullPointerException ex) {
+			objBuilder.add("Artist", "Unknown");
+			tag.setArtist("Unknown");
+			change = true;
+		}
+		try{
+			objBuilder.add("Composer", tag.getComposer()).toString();
+		}catch(NullPointerException ex) {
+			objBuilder.add("Composer", "Unknown");
+			tag.setComposer("Unknown");
+			change = true;
+		}
+		try{
+			objBuilder.add("Genre", tag.getGenreDescription()).toString();
+		}catch(NullPointerException ex) {
+			objBuilder.add("Genre", "Unknown");
+			tag.setGenreDescription("Rock");
+			change = true;
+		}
+		try{
+			objBuilder.add("Album", tag.getAlbum()).toString();
+		}catch(NullPointerException ex) {
+			objBuilder.add("Album", "Unknown");
+			tag.setAlbum("Unknown");
+			change = true;
+		}
+		
+		if(change) {
+			tag.setPadding(true);
+			mp3File.save(mp3File.getFilename() + ".retag");
+			renameFiles(mp3File);
+		}
 		
 		OutputStream OS = new FileOutputStream(jsonDocPath);
 		JsonObject obj = objBuilder.build();
@@ -105,5 +183,54 @@ public class MusicLibrary {
 		JsonWriter writer = Json.createWriter(OS);
 		writer.writeArray(finalArray);
 		writer.close();
+	}
+	
+	private void editJsonDoc(String title, ID3v2 tag) throws Exception {
+		try {
+			FileReader fileReader = new FileReader(jsonDocPath);
+			if(fileReader.ready()) {
+				InputStream tempIS = new FileInputStream(new File(jsonDocPath));			
+				JsonReader reader = Json.createReader(tempIS);			
+				JsonArray array = reader.readArray();			
+				reader.close();
+				for(int i = 0; i < array.size(); i++) {
+					JsonObject obj = array.getJsonObject(i);
+					if(obj.getString("Title").equalsIgnoreCase(title)) {
+						objBuilder.add("Title", tag.getTitle());
+						objBuilder.add("Artist", tag.getArtist());
+						objBuilder.add("Composer", tag.getComposer());
+						objBuilder.add("Genre", tag.getGenre());
+						objBuilder.add("Album", tag.getAlbum());
+						JsonObject newObj = objBuilder.build();
+						
+						for(int j = 0; i < array.size(); i++) {
+							if(j == i) {
+								arrBuilder.add(newObj);
+							}else {
+								arrBuilder.add(array.get(j));
+							}
+						}
+						finalArray = arrBuilder.build();
+						OutputStream tempOS = new FileOutputStream(new File(jsonDocPath));
+						JsonWriter writer = Json.createWriter(tempOS);
+						writer.writeArray(finalArray);
+						writer.close();
+						break;
+					}	
+				}
+				
+			}
+			fileReader.close();
+		}catch(FileNotFoundException ex) {}
+	}
+	
+	private void renameFiles(Mp3File mp3File) {
+		File originalFile = new File(mp3File.getFilename());
+		File backupFile = new File(mp3File.getFilename() + ".bak");
+		File retaggedFile = new File(mp3File.getFilename() + ".retag");
+		
+		originalFile.renameTo(backupFile);
+		retaggedFile.renameTo(originalFile);
+		backupFile.delete();
 	}
 }

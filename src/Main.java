@@ -80,7 +80,12 @@ public class Main {
 		exUser.logIn(users);*/
 		
 		MusicLibrary mL = new MusicLibrary();
-		mL.storeSong("Daisy", "https://dl.last.fm/static/1526050792/138298282/c31883578d6a1d7c0b7e95938a453eb7ecc8f36bb12cf044e5bcba53fdf895ab/Lifetheory+-+Daisy.mp3");
+		mL.storeSong("Get Got", "https://dl.last.fm/static/1526169027/131211148/10d983676336984bb683b9f490bd919021c116314e355f6ccea2296c3c9bb2f3/Death+Grips+-+Get+Got.mp3");
+		File file = new File("C:\\Users\\david\\Documents\\MusicLibrary\\Get Got.mp3");
+		String[] arr = {"Get Got","Lifetheory", "DavePJ07", "Pop", "Let's Bring It All Together!"};
+		mL.printMetadata(file);
+		//mL.updateMetadata(file, arr);
+		//mL.printMetadata(file);
 	}
 	
 	public static BinarySearchTree loadFileInBST() {
