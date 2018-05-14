@@ -116,3 +116,16 @@ public class Sockets {
 		}
 	}
 }
+//SOCKETS LOS QUE HAY Y LOS FALTANTES
+//obteneramigo 0,creausuario1
+//validarregistro2
+//cargararchivosycarpetas3
+//sincronizar bibliotecadeusuario4
+//metadata5
+//calificaciondecancion6
+//mensages7
+//recomendaciones8
+//listadeamigos9
+//ordenamientoBiblioteca10
+//reproducirMusica11
+//buscarCanciones12
