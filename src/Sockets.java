@@ -93,6 +93,25 @@ public class Sockets {
 					pw.println("<false> Apodo utilizado </false>");
 				}
 			}
+			if (name.substring(0, 1).equals("2")) {
+				String nick = "";
+				String pass = "";
+				for (int i = 2; name.length() > i; i++) {
+					if (name.substring(i, i + 1).equals("/")) {
+						nick = name.substring(2, i);
+						pass = name.substring(i+1, name.length());
+					}
+				}
+				ExistingUser user = new ExistingUser(nick, pass);
+				boolean validacion = user.logIn(users);
+				if (validacion) {
+					String xml = "<true> Apodo libre </true>";
+					pw.println(xml);
+				} else {
+					String xml = "<false> Apodo libre </false>";
+					pw.println(xml);
+				}
+			}
 			client.close();
 		}
 	}
