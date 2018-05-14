@@ -79,6 +79,75 @@ public class ExistingUser {
 		writer.close();
 	}
 	
+	public String addFriends(String[] friend) throws Exception {
+		//["usuario", "amigo"]
+		//["amigo1", "amigo2", "amigo3"]
+		if(!userNameExists(friend[1])) {
+			return "false";
+		}
+		if(!friendAlreadyExists(friend[0], friend[1])) {
+			JsonArray array = readJsonFile();
+			JsonArrayBuilder arrBuilder = Json.createArrayBuilder();
+			for(int i = 0; i < array.size(); i++) {
+				JsonObjectBuilder objBuilder = Json.createObjectBuilder();
+				JsonObject obj = array.getJsonObject(i);
+				if(obj.getString("UserName").equalsIgnoreCase(friend[0])) {
+					JsonArray friends = obj.getJsonArray("Friends");
+					JsonArrayBuilder arrBuilder2 = Json.createArrayBuilder();
+					for(int j = 0; j < friends.size(); j++) {
+						arrBuilder2.add(friends.get(j));
+					}
+					arrBuilder2.add(friend[1]);
+					objBuilder.add("UserName", obj.get("UserName"));
+					objBuilder.add("Name", obj.get("Name"));
+					objBuilder.add("Age", obj.get("Age"));
+					objBuilder.add("MusicalGenres", obj.get("MusicalGenres"));
+					objBuilder.add("Password", obj.get("Password"));				
+					objBuilder.add("Friends", arrBuilder2.build());
+					objBuilder.add("Messages", obj.get("Messages"));
+					arrBuilder.add(objBuilder.build());
+				}else {
+					arrBuilder.add(obj);
+				}
+			}
+			
+			JsonArray finalArray = arrBuilder.build();
+			OutputStream tempOS = new FileOutputStream(new File("usuarios.json"));
+			JsonWriter writer = Json.createWriter(tempOS);
+			writer.writeArray(finalArray);
+			writer.close();
+			return "true";
+		}else {
+			return "ya";
+		}
+	}
+	
+	private boolean friendAlreadyExists(String userName, String friend) throws Exception {		
+		JsonArray array = readJsonFile();
+		for(int i = 0; i < array.size(); i++) {
+			JsonObject obj = array.getJsonObject(i);
+			if(obj.getString("UserName").equalsIgnoreCase(userName)) {
+				JsonArray friends = obj.getJsonArray("Friends");
+				for(int j = 0; j < friends.size(); j++) {
+					if(friends.getString(j).equalsIgnoreCase(friend)) {
+						return true;
+					}
+				}
+			}			
+		}
+		return false;
+	}
+	
+	private boolean userNameExists(String userName) throws Exception {
+		JsonArray array = readJsonFile();
+		for(int i = 0; i < array.size(); i++) {
+			JsonObject obj = array.getJsonObject(i);
+			if(obj.getString("UserName").equalsIgnoreCase(userName)) {
+				return true;
+			}
+		}
+		return false;
+	}
 	public String getExistingUserNames() throws Exception {
 		JsonArray array = readJsonFile();
 		String existingUsers = "";
