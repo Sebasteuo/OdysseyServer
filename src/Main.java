@@ -79,8 +79,9 @@ public class Main {
 		ExistingUser exUser = new ExistingUser("davepj07", "p455w0rd");
 		exUser.logIn(users);
 		
-		//System.out.println(exUser.getExistingNickNames());
-		Sockets.conectar(users);
+		System.out.println(exUser.getExistingUserNames());
+		System.out.println(exUser.getFriendsList("hack998"));
+		//Sockets.conectar(users);
 		
 		/*MusicLibrary mL = new MusicLibrary();
 		mL.storeSong("Get Got", "https://dl.last.fm/static/1526169027/131211148/10d983676336984bb683b9f490bd919021c116314e355f6ccea2296c3c9bb2f3/Death+Grips+-+Get+Got.mp3");

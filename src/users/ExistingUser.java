@@ -39,7 +39,7 @@ public class ExistingUser {
 		}		
 	}
 	
-	public String getExistingNickNames() throws Exception {
+	public String getExistingUserNames() throws Exception {
 		File jsonFile = new File("usuarios.json");
 		InputStream IS = new FileInputStream(jsonFile);
 		String existingUsers = "";
@@ -51,6 +51,25 @@ public class ExistingUser {
 			existingUsers += obj.getString("UserName") + "/";
 		}
 		return existingUsers;
+	}
+	
+	public String getFriendsList(String userName) throws Exception {
+		File jsonFile = new File("usuarios.json");
+		InputStream IS = new FileInputStream(jsonFile);
+		String friendsList = "";
+		JsonReader reader = Json.createReader(IS);
+		JsonArray array = reader.readArray();
+		reader.close();
+		for(int i = 0; i < array.size(); i++) {
+			JsonObject obj = array.getJsonObject(i);
+			if(obj.getString("UserName").equalsIgnoreCase(userName)) {
+				JsonArray friends = obj.getJsonArray("Friends");
+				for(int j = 0; j < friends.size(); j++) {
+					friendsList += friends.getString(j) + "/";
+				}
+			}			
+		}
+		return friendsList;
 	}
 	
 	private String encodePassword(String password) throws Exception {
