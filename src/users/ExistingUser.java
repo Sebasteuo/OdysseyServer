@@ -2,14 +2,19 @@ package users;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.StringReader;
 import java.security.MessageDigest;
 
 import javax.json.Json;
 import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
+import javax.json.JsonWriter;
 
 import treeStructure.BinarySearchTree;
 
@@ -39,13 +44,44 @@ public class ExistingUser {
 		}		
 	}
 	
+	public void addMessages(String[] message) throws Exception {
+		//["emisor", "receptor", "mensaje"]
+		//[{"emisor":"", "mensaje", ""}, {"emisor":"", "mensaje":""}]
+		JsonArray array = readJsonFile();
+		JsonArrayBuilder arrBuilder = Json.createArrayBuilder();
+		for(int i = 0; i < array.size(); i++) {
+			JsonObjectBuilder objBuilder = Json.createObjectBuilder();
+			JsonObject obj = array.getJsonObject(i);
+			if(obj.getString("UserName").equalsIgnoreCase(message[1])) {
+				JsonArray messages = obj.getJsonArray("Messages");
+				JsonArrayBuilder arrBuilder2 = Json.createArrayBuilder();
+				for(int j = 0; j < messages.size(); j++) {
+					arrBuilder2.add(messages.get(j));
+				}
+				arrBuilder2.add(Json.createObjectBuilder().add("Emisor", message[0]).add("Message", message[2]).build());
+				objBuilder.add("UserName", obj.get("UserName"));
+				objBuilder.add("Name", obj.get("Name"));
+				objBuilder.add("Age", obj.get("Age"));
+				objBuilder.add("MusicalGenres", obj.get("MusicalGenres"));
+				objBuilder.add("Password", obj.get("Password"));				
+				objBuilder.add("Friends", obj.get("Friends"));
+				objBuilder.add("Messages", arrBuilder2.build());
+				arrBuilder.add(objBuilder.build());
+			}else {
+				arrBuilder.add(obj);
+			}
+		}
+		
+		JsonArray finalArray = arrBuilder.build();
+		OutputStream tempOS = new FileOutputStream(new File("usuarios.json"));
+		JsonWriter writer = Json.createWriter(tempOS);
+		writer.writeArray(finalArray);
+		writer.close();
+	}
+	
 	public String getExistingUserNames() throws Exception {
-		File jsonFile = new File("usuarios.json");
-		InputStream IS = new FileInputStream(jsonFile);
+		JsonArray array = readJsonFile();
 		String existingUsers = "";
-		JsonReader reader = Json.createReader(IS);
-		JsonArray array = reader.readArray();
-		reader.close();
 		for(int i = 0; i < array.size(); i++) {
 			JsonObject obj = array.getJsonObject(i);
 			existingUsers += obj.getString("UserName") + "/";
@@ -54,12 +90,8 @@ public class ExistingUser {
 	}
 	
 	public String getFriendsList(String userName) throws Exception {
-		File jsonFile = new File("usuarios.json");
-		InputStream IS = new FileInputStream(jsonFile);
+		JsonArray array = readJsonFile();
 		String friendsList = "";
-		JsonReader reader = Json.createReader(IS);
-		JsonArray array = reader.readArray();
-		reader.close();
 		for(int i = 0; i < array.size(); i++) {
 			JsonObject obj = array.getJsonObject(i);
 			if(obj.getString("UserName").equalsIgnoreCase(userName)) {
@@ -88,5 +120,15 @@ public class ExistingUser {
 		}
 		
 		return hexaString.toString();
+	}
+	
+	private JsonArray readJsonFile() throws Exception {
+		File jsonFile = new File("usuarios.json");
+		InputStream IS = new FileInputStream(jsonFile);
+		String friendsList = "";
+		JsonReader reader = Json.createReader(IS);
+		JsonArray array = reader.readArray();
+		reader.close();
+		return array;
 	}
 }

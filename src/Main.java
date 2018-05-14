@@ -78,9 +78,10 @@ public class Main {
 		
 		ExistingUser exUser = new ExistingUser("davepj07", "p455w0rd");
 		exUser.logIn(users);
-		
+		String[] message = {"dave","hack998","sebas esta dormido"};
 		System.out.println(exUser.getExistingUserNames());
 		System.out.println(exUser.getFriendsList("hack998"));
+		exUser.addMessages(message);
 		//Sockets.conectar(users);
 		
 		/*MusicLibrary mL = new MusicLibrary();

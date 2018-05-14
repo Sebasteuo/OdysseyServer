@@ -72,6 +72,8 @@ public class NewUser {
 	}
 
 	public JsonObject signInUser() throws IOException {
+		userBuilder.add("Messages", Json.createArrayBuilder().build());
+		
 		try {
 			FileReader fileReader = new FileReader("usuarios.json");
 
