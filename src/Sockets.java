@@ -21,7 +21,7 @@ public class Sockets {
 			if (name.substring(0,1).equals("0")) {
 				ExistingUser a = new ExistingUser("","");
 				String b = a.getExistingUserNames();
-				String xml = "<b> Usuarios existentes: </b>";
+				String xml = "<b>"+b+"</b>";
 				pw.println(xml);
 			}
 			if (name.substring(0, 1).equals("1")) {
