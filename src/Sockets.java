@@ -10,7 +10,7 @@ import users.NewUser;
 
 public class Sockets {
 	public static void conectar(BinarySearchTree users) throws Exception {
-		ServerSocket serversocket = new ServerSocket(8000);
+		ServerSocket serversocket = new ServerSocket(7000);
 		System.out.println("Listo");
 		while (true) {
 			Socket client = serversocket.accept();
@@ -18,10 +18,10 @@ public class Sockets {
 			PrintWriter pw = new PrintWriter(client.getOutputStream(), true);
 			String name = scanner.nextLine();
 			System.out.println(name);
-			if (name.substring(0,1).equals("0")) {
-				ExistingUser a = new ExistingUser("","");
+			if (name.substring(0, 1).equals("0")) {
+				ExistingUser a = new ExistingUser("", "");
 				String b = a.getExistingUserNames();
-				String xml = "<b>"+b+"</b>";
+				String xml = "<b>" + b + "</b>";
 				pw.println(xml);
 			}
 			if (name.substring(0, 1).equals("1")) {
@@ -36,7 +36,7 @@ public class Sockets {
 					int j = 3;
 					int x = 0;
 					String[] genero = new String[10];
-					String[] amigo = new String [10];
+					String[] amigo = new String[10];
 					for (int i = 2; name.length() > i; i++) {
 						if (name.substring(i, j).equals("/")) {
 							if (x == 0) {
@@ -65,27 +65,28 @@ public class Sockets {
 							} else {
 								fincontra = j;
 								x++;
-								//int v = fingenero + 1;
-								//int z = 0;
-								//int m = fingenero;
-								//for (int c = 0; name.substring(fingenero, name.length()).length() >= c; c++) {
-									//if (name.substring(v - 1, v).equals(",")) {
-										//amigo[z] = name.substring(m, v - 1);
-										//m = c + fingenero + 1;
-										//z++;
-									//}
-									//v++;
-								//}
+								// int v = fingenero + 1;
+								// int z = 0;
+								// int m = fingenero;
+								// for (int c = 0; name.substring(fingenero, name.length()).length() >= c; c++)
+								// {
+								// if (name.substring(v - 1, v).equals(",")) {
+								// amigo[z] = name.substring(m, v - 1);
+								// m = c + fingenero + 1;
+								// z++;
+								// }
+								// v++;
+								// }
 							}
 						}
 						j++;
 					}
 					NewUser usuario = new NewUser();
-					usuario.setUserName(name.substring(2, finick-1));
-					usuario.setName(name.substring(finick, finame-1));
-					usuario.setAge(Integer.parseInt(name.substring(finame, finedad-1)));
+					usuario.setUserName(name.substring(2, finick - 1));
+					usuario.setName(name.substring(finick, finame - 1));
+					usuario.setAge(Integer.parseInt(name.substring(finame, finedad - 1)));
 					usuario.setMusicalGenres(genero);
-					usuario.setPassword(name.substring(fingenero, fincontra-1));
+					usuario.setPassword(name.substring(fingenero, fincontra - 1));
 					usuario.setFriends(amigo);
 					JsonObject toInsert = usuario.signInUser();
 					System.out.println(toInsert.toString());
@@ -99,7 +100,7 @@ public class Sockets {
 				for (int i = 2; name.length() > i; i++) {
 					if (name.substring(i, i + 1).equals("/")) {
 						nick = name.substring(2, i);
-						pass = name.substring(i+1, name.length());
+						pass = name.substring(i + 1, name.length());
 					}
 				}
 				ExistingUser user = new ExistingUser(nick, pass);
@@ -111,6 +112,31 @@ public class Sockets {
 					String xml = "<false> Apodo libre </false>";
 					pw.println(xml);
 				}
+			}
+			if (name.substring(0, 1).equals("7")) {
+				String xml = "<true> Se ha enviado el mensaje </true>";
+				pw.println(xml);
+				ExistingUser a = new ExistingUser("", "");
+				String[] message = new String[3];
+				int z = 0;
+				int x = 2;
+				for (int i = 2; name.length() > i; i++) {
+					if (name.substring(i, i + 1).equals("/")) {
+						message[z] = name.substring(x, i);
+						x = i + 1;
+						z++;
+					}
+					
+				}
+				message[z] = name.substring(x, name.length());
+				a.addMessages(message);
+			}
+			if (name.substring(0, 1).equals("8")) {
+			}
+			if (name.substring(0, 1).equals("9")) {
+				ExistingUser a = new ExistingUser("", "");
+				String xml = "<true>" + a.getFriendsList(name.substring(2, name.length())) + "</true>";
+				pw.println(xml);
 			}
 			client.close();
 		}
