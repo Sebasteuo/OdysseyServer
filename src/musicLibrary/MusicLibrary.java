@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.file.Files;
 
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -30,21 +31,21 @@ public class MusicLibrary {
 	
 	String home = System.getProperty("user.home"); //Obtiene la ruta principal del sistema (C://user//xxxx//)
 	String folderPath = home + "\\Documents\\MusicLibrary\\"; //Ruta donde se almacenaran las canciones
-	String jsonDocPath = home + "\\Documents\\MusicLibrary\\MusicLibrary.json"; //Ruta de acceso al JsonDoc
 	
 	public MusicLibrary() throws Exception {
 		this.objBuilder = Json.createObjectBuilder();
 		this.arrBuilder = Json.createArrayBuilder();
 		
-		File folder = new File(folderPath);
+		File folder = new File(folderPath + "Principal");
 		if(!folder.exists()) { //Crea la carpeta en caso de que no exista
 			folder.mkdirs();
 		}
 	}
 	
-	public void storeSong(String songName, String url) throws Exception{	
+	public void storeSong(String songName, String url, String userName) throws Exception{	
 		URLConnection connection = new URL(url).openConnection();
-		File song = new File(folderPath + songName + ".mp3"); //Crea el archivo donde se guardara la cancion
+		File song = new File(folderPath + "Principal\\" + songName + ".mp3"); //Crea el archivo donde se guardara la cancion
+		File userSong = new File(folderPath + userName + "\\" + songName + ".mp3");
 		if(!song.exists()) { //Comprueba si la cancion ya existe en el directorio
 			InputStream IS = connection.getInputStream(); //Obtiene los datos recibidos por el url
 			OutputStream OS = new FileOutputStream(song); //Convierte el archivo en editable para escribir la informacion
@@ -56,19 +57,22 @@ public class MusicLibrary {
 			}
 			System.out.println("Download Complete!");
 			OS.close(); //Cierra el archivo 
-			this.saveMetadata(song); //Llama al metodo para guardar la metadata de la cancion
+			Files.copy(song.toPath(), userSong.toPath()); //Copia la cancion en la biblioteca especifica del usuario
+			this.saveMetadata(song, userSong, userName); //Llama al metodo para guardar la metadata de la cancion
 		}else {
 			System.out.println("ERROR: La cancion ya se encuentra en la biblioteca.");
 			return;
 		}		
 	}
 	
-	public void updateMetadata(File song, String[] metadata) throws Exception {
+	public void updateMetadata(File song, String userName, String[] metadata) throws Exception {
 		Mp3File mp3File = new Mp3File(song);
 		ID3v2 tag = mp3File.getId3v2Tag();
+		String oldTitle = null;
 		boolean change = false;
 		
 		if(!tag.getTitle().equalsIgnoreCase(metadata[0])) {
+			oldTitle = tag.getTitle();
 			tag.setTitle(metadata[0]);	
 			change = true;
 		}
@@ -90,11 +94,16 @@ public class MusicLibrary {
 		}
 		
 		if(change == true) {
-			System.out.println("Entro");
 			tag.setPadding(true);
 			mp3File.save(mp3File.getFilename() + ".retag");
 			renameFiles(mp3File);
-			editJsonDoc(tag.getTitle(), tag);
+			if(oldTitle != null) {
+				editJsonDoc(oldTitle, tag, userName);
+				mp3File.save(folderPath + userName + "\\" + metadata[0] + ".mp3");
+				Files.deleteIfExists(song.toPath());
+			}else {
+				editJsonDoc(tag.getTitle(), tag, userName);
+			}
 		}
 	}
 	
@@ -108,7 +117,7 @@ public class MusicLibrary {
     	System.out.println("Genre: " + tag.getGenre() + " (" + tag.getGenreDescription() + ")");
 	}
 	
-	private void saveMetadata(File song) throws Exception {
+	private void saveMetadata(File song, File userSong, String userName) throws Exception {
 		Mp3File mp3File = new Mp3File(song);
 		
 		ID3v2 tag;
@@ -120,9 +129,9 @@ public class MusicLibrary {
 		}
 		
 		try {
-			FileReader fileReader = new FileReader(jsonDocPath);
+			FileReader fileReader = new FileReader(folderPath + "Principal\\" + "MusicLibrary.json");
 			if(fileReader.ready()) {
-				InputStream tempIS = new FileInputStream(new File(jsonDocPath));			
+				InputStream tempIS = new FileInputStream(new File(folderPath + "Principal\\" + "MusicLibrary.json"));			
 				JsonReader reader = Json.createReader(tempIS);			
 				JsonArray oldArray = reader.readArray();			
 				reader.close();			
@@ -174,22 +183,29 @@ public class MusicLibrary {
 			tag.setPadding(true);
 			mp3File.save(mp3File.getFilename() + ".retag");
 			renameFiles(mp3File);
+			Files.deleteIfExists(userSong.toPath());
+			Files.copy(song.toPath(), userSong.toPath());
 		}
 		
-		OutputStream OS = new FileOutputStream(jsonDocPath);
+		OutputStream OS = new FileOutputStream(folderPath + "Principal\\" + "MusicLibrary.json");
 		JsonObject obj = objBuilder.build();
 		arrBuilder.add(obj);
 		finalArray = arrBuilder.build();
 		JsonWriter writer = Json.createWriter(OS);
 		writer.writeArray(finalArray);
 		writer.close();
+		
+		//Copia el archivo json al directorio del usuario 
+		File newFile = new File(folderPath + userName + "\\" + "MusicLibrary.json");
+		File file = new File(folderPath + "Principal\\" + "MusicLibrary.json");
+		Files.copy(file.toPath(), newFile.toPath());
 	}
 	
-	private void editJsonDoc(String title, ID3v2 tag) throws Exception {
+	private void editJsonDoc(String title, ID3v2 tag, String userName) throws Exception {
 		try {
-			FileReader fileReader = new FileReader(jsonDocPath);
+			FileReader fileReader = new FileReader(folderPath + userName + "\\" + "MusicLibrary.json");
 			if(fileReader.ready()) {
-				InputStream tempIS = new FileInputStream(new File(jsonDocPath));			
+				InputStream tempIS = new FileInputStream(new File(folderPath + userName + "\\" + "MusicLibrary.json"));			
 				JsonReader reader = Json.createReader(tempIS);			
 				JsonArray array = reader.readArray();			
 				reader.close();
@@ -211,7 +227,7 @@ public class MusicLibrary {
 							}
 						}
 						finalArray = arrBuilder.build();
-						OutputStream tempOS = new FileOutputStream(new File(jsonDocPath));
+						OutputStream tempOS = new FileOutputStream(new File(folderPath + userName + "\\" + "MusicLibrary.json"));
 						JsonWriter writer = Json.createWriter(tempOS);
 						writer.writeArray(finalArray);
 						writer.close();

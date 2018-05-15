@@ -80,17 +80,17 @@ public class Main {
 		exUser.logIn(users);
 		//String[] message = {"dave","hack998","sebas se volvio a dormir"};
 		//exUser.addMessages(message);
-		//String[] friend = {"davepj07", "Alisson"};
+		//String[] friend = {"hack998", "davepj07"};
 		//exUser.addFriends(friend);
 		//Sockets.conectar(users);
 		
-		/*MusicLibrary mL = new MusicLibrary();
-		mL.storeSong("Get Got", "https://dl.last.fm/static/1526169027/131211148/10d983676336984bb683b9f490bd919021c116314e355f6ccea2296c3c9bb2f3/Death+Grips+-+Get+Got.mp3");
-		File file = new File("C:\\Users\\david\\Documents\\MusicLibrary\\Get Got.mp3");
+		MusicLibrary mL = new MusicLibrary();
+		mL.storeSong("Blackjack", "https://dl.last.fm/static/1526341973/131211147/aac86e980337f7fb6aba819a865de1a0b66bf9eb71e04dd05fe29a17a4641664/Death+Grips+-+Blackjack.mp3", "davepj07");
+		File file = new File("C:\\Users\\david\\Documents\\MusicLibrary\\davepj07\\Blackjack.mp3");
 		String[] arr = {"Get Got","Lifetheory", "DavePJ07", "Pop", "Let's Bring It All Together!"};
 		mL.printMetadata(file);
-		//mL.updateMetadata(file, arr);
-		//mL.printMetadata(file);*/
+		mL.updateMetadata(file, "davepj07", arr);
+		//mL.printMetadata(file);
 	}
 	
 	public static BinarySearchTree loadFileInBST() {

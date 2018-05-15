@@ -72,6 +72,8 @@ public class NewUser {
 	}
 
 	public JsonObject signInUser() throws IOException {
+		String folderPath = System.getProperty("user.home") + "\\Documents\\MusicLibrary\\"+this.userName+"\\";
+		boolean folder = new File(folderPath).mkdirs();
 		userBuilder.add("Messages", Json.createArrayBuilder().build());
 		
 		try {
