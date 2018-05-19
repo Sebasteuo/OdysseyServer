@@ -11,6 +11,7 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonValue;
 
+import Sorts.Sort;
 import musicLibrary.IndexLibrary;
 import musicLibrary.MusicLibrary;
 import social.Friends;
@@ -31,7 +32,7 @@ public class Main {
 		try {
 			//Carga el archivo JSON en un arbol binario al iniciar el servidor
 			users = loadFileInBST();
-		}catch(NullPointerException ex) {}	
+		}catch(NullPointerException ex) {System.out.println("ERROR!");}	
 		
 		NewUser user = new NewUser(users);
 		user.setUserName("davepj07");
@@ -78,9 +79,10 @@ public class Main {
 		
 		ExistingUser exUser = new ExistingUser("davepj07", "p455w0rd", users);
 		exUser.logIn();
+		//System.out.println(exUser.getExistingUserNames());
 		
-		Sockets.conectar(users);
-	  /*System.out.println(exUser.getExistingUserNames());
+		//Sockets.conectar(users);
+	    /*System.out.println(exUser.getExistingUserNames());
 		
 		Recommendations messages = new Recommendations(users);			  
 		String[] message = {"davepj07","hack998","Esto es solo una prueba"}; 
@@ -108,6 +110,7 @@ public class Main {
 		/*IndexLibrary index = new IndexLibrary();
 		BTree bTree = index.createTitleIndex();
 		bTree.print(bTree.getRoot());*/
+		
 	}
 	
 	public static BinarySearchTree loadFileInBST() {

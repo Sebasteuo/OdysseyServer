@@ -41,8 +41,7 @@ public class IndexLibrary {
 				reader.close();
 				for (int i = 0; i < array.size(); i++) {
 					JsonObject obj = array.getJsonObject(i);
-					String title = obj.getString("Title");
-					this.titleIndex.insertNode(title);
+					this.titleIndex.insertNode(obj.toString());
 				}
 			}
 			fileReader.close();
