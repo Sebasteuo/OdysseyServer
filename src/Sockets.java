@@ -69,18 +69,18 @@ public class Sockets {
 							} else {
 								fincontra = j;
 								x++;
-								// int v = fingenero + 1;
-								// int z = 0;
-								// int m = fingenero;
-								// for (int c = 0; name.substring(fingenero, name.length()).length() >= c; c++)
-								// {
-								// if (name.substring(v - 1, v).equals(",")) {
-								// amigo[z] = name.substring(m, v - 1);
-								// m = c + fingenero + 1;
-								// z++;
-								// }
-								// v++;
-								// }
+								int v = fingenero + 1;
+								int z = 0;
+								int m = fincontra;
+								for (int c = 0; name.substring(fingenero, name.length()).length() > c; c++)
+								{
+									if (name.substring(v - 1, v).equals(",")) {
+										amigo[z] = name.substring(m, v - 1);
+										m = c + fingenero + 1;
+										z++;
+									}
+								v++;
+								}
 							}
 						}
 						j++;
@@ -142,7 +142,7 @@ public class Sockets {
 			}
 			if (name.substring(0, 2).equals("19")) {
 				Friends a = new Friends(users);
-				String xml = "<true>" + a.getFriendsList(name.substring(2, name.length())) + "</true>";
+				String xml = "<true>" + a.getFriendsList(name.substring(3, name.length())) + "</true>";
 				pw.println(xml);
 			}
 			if ((name.substring(0, 2)).equals("23")) {
@@ -167,15 +167,17 @@ public class Sockets {
 	}
 }
 //SOCKETS LOS QUE HAY Y LOS FALTANTES
-//obteneramigo 0,creausuario1
-//validarregistro2
-//cargararchivosycarpetas3
-//sincronizar bibliotecadeusuario4
-//metadata5
-//calificaciondecancion6
-//mensages7
-//recomendaciones8
-//listadeamigos9
-//ordenamientoBiblioteca10
-//reproducirMusica11
-//buscarCanciones12
+//obtener amigo 0,
+//crea usuario 10
+//validarregistro12
+//cargararchivosycarpetas13
+//sincronizar bibliotecadeusuario14
+//metadata15
+//calificaciondecancion16
+//mensages17
+//recomendaciones18
+//listadeamigos19
+//ordenamientoBiblioteca20
+//reproducirMusica21
+//buscarCanciones22
+//agregar amigo 23
