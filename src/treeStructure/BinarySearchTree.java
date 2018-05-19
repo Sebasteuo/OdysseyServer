@@ -52,7 +52,7 @@ public class BinarySearchTree {
 		
     public String[] inorder(){
     	String[] array = new String[size];
-        return inorder(root, array, 0);
+        return inorder(root, array);
     }
 
     public BinaryTreeNode rotateLeftLeft(BinaryTreeNode k2) {
@@ -82,14 +82,17 @@ public class BinarySearchTree {
 		k3.setRight(rotateLeftLeft(k3.getRight()));
 		return rotateRightRight(k3);
 	}
-
-    private String[] inorder(BinaryTreeNode r, String[] array, int count){
+    
+    private int count = -1;
+    private String[] inorder(BinaryTreeNode r, String[] array){
         if (r != null){
-            inorder(r.getLeft(), array, count);
-            //array[count] = r.getValue();
-            System.out.print(r.getValue() +"\n");
-            inorder(r.getRight(), array, count);
-        }
+            inorder(r.getLeft(), array);
+            array[this.count] = r.getValue();
+            //System.out.print(r.getValue() +"\n");
+            inorder(r.getRight(), array);
+        }else {
+        	this.count++;
+        }        
         return array;
     }
 

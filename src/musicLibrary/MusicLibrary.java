@@ -6,14 +6,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
-import java.net.Socket;
 import java.net.URL;
-import java.net.URLConnection;
 import java.nio.file.Files;
 import java.util.Scanner;
 
@@ -26,9 +22,13 @@ import javax.json.JsonReader;
 import javax.json.JsonValue;
 import javax.json.JsonWriter;
 
+import org.apache.commons.io.FileUtils;
+
 import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.ID3v24Tag;
 import com.mpatric.mp3agic.Mp3File;
+
+import Sorts.Sort;
 
 public class MusicLibrary {
 	private JsonObjectBuilder objBuilder;
@@ -48,72 +48,17 @@ public class MusicLibrary {
 		}
 	}
 	
-	public void storeSong(String songName, String url, String userName) throws Exception{	
-		URLConnection connection = new URL(url).openConnection();
+	public void storeSong(String songName, byte[] buf, String userName) throws Exception{
 		File song = new File(folderPath + "Principal\\" + songName + ".mp3"); //Crea el archivo donde se guardara la cancion
 		File userSong = new File(folderPath + userName + "\\" + songName + ".mp3");
 		if(!song.exists()) { //Comprueba si la cancion ya existe en el directorio
-			InputStream IS = connection.getInputStream(); //Obtiene los datos recibidos por el url
-			OutputStream OS = new FileOutputStream(song); //Convierte el archivo en editable para escribir la informacion
-			
-			byte[] buffer = new byte[4096]; 
-			int length;
-			while((length = IS.read(buffer)) > 0) {
-				OS.write(buffer, 0, length); //Escribe los datos en el archivo mp3
-			}
-			System.out.println("Download Complete!");
-			OS.close(); //Cierra el archivo 
+			FileUtils.writeByteArrayToFile(song, buf);
 			Files.copy(song.toPath(), userSong.toPath()); //Copia la cancion en la biblioteca especifica del usuario
 			this.saveMetadata(song, userSong, userName); //Llama al metodo para guardar la metadata de la cancion
 		}else {
 			System.out.println("ERROR: La cancion ya se encuentra en la biblioteca.");
 			return;
 		}		
-	}
-	
-	@SuppressWarnings("resource")
-	public String storeSong(Socket socket, String userName) throws Exception{	
-		File song;
-		ObjectOutputStream OOS = new ObjectOutputStream(socket.getOutputStream());
-        ObjectInputStream OIS = new ObjectInputStream(socket.getInputStream());
-        FileOutputStream FOS = null;
-        byte[] buffer = new byte[100];
-        
-        // Lee el nombre del archivo
-        Object obj = OIS.readObject();
-        if (obj instanceof String) {
-        	song = new File(folderPath + "Principal\\" + obj.toString() + ".mp3");
-            FOS = new FileOutputStream(song);
-        } else {
-            return "false";
-        }
-        
-        // Lee el contenido del archivo.
-        Integer bytesRead = 0;
-        do {
-            obj = OIS.readObject();
-            if (!(obj instanceof Integer)) {
-                return "false";
-            }
-            bytesRead = (Integer) obj;
-            obj = OIS.readObject();
-            if (!(obj instanceof byte[])) {
-                return "false";
-            }
-            buffer = (byte[]) obj;
- 
-            //Escribe los datos en el archivo a guardar
-            FOS.write(buffer, 0, bytesRead);
-        } while (bytesRead == 100);
-        
-        FOS.close();
-        OIS.close();
-        OOS.close();
-        
-        File userSong = new File(folderPath + userName + "\\" + obj.toString() + ".mp3");
-        Files.copy(song.toPath(), userSong.toPath());
-        this.saveMetadata(song, userSong, userName); //Llama al metodo para guardar la metadata de la cancion
-        return "true";
 	}
 	
 	public void updateMetadata(File song, String userName, String[] metadata) throws Exception, IllegalArgumentException {
@@ -224,8 +169,6 @@ public class MusicLibrary {
 				lyrics = "Unknown";
 			}
 			
-			System.out.println("Title: " + trackName + "\nArtist: " + artist + "\nGenre: " + genre + "\nAlbum: " + album + "\nYear: " + year + "\nLyrics: " + lyrics);
-			
 			String[] arr = {trackName, artist, genre, album, year, lyrics};
 			updateMetadata(song, userName, arr);
 		}else {
@@ -239,6 +182,118 @@ public class MusicLibrary {
 			Files.delete(file.toPath());
 		}else {
 			System.out.println("La cancion no se encuentra en la biblioteca.");
+		}
+	}
+	
+	public String sortLibraryByTitle(String userName) throws Exception {
+		try {
+			String[] songs = null;
+			String sortedLib = "";
+			FileReader fileReader = new FileReader(folderPath + userName + "\\" + "MusicLibrary.json");
+			if(fileReader.ready()) {
+				InputStream tempIS = new FileInputStream(new File(folderPath + userName + "\\" + "MusicLibrary.json"));			
+				JsonReader reader = Json.createReader(tempIS);			
+				JsonArray array = reader.readArray();			
+				reader.close();
+				songs = new String[array.size()];
+				for(int i = 0; i < array.size(); i++) {
+					JsonObject obj = array.getJsonObject(i);
+					songs[i] = obj.getString("Title");
+				}
+			}
+			fileReader.close();
+			
+			if(songs!=null) {
+				Sort sort = new Sort();
+				songs = sort.quickSort(songs);
+				sortedLib = "";
+				for (int i = 0; i < songs.length; i++) {
+					sortedLib += songs[i] + "/";
+				}
+			}
+			return sortedLib;
+		}catch(Exception ex){
+			return "false";
+		}
+	}
+	
+	public String sortLibraryByArtist(String userName) throws Exception {
+		try {
+			String[] artists = null;
+			JsonArray array = null;
+			String sortedLib = "";
+			FileReader fileReader = new FileReader(folderPath + userName + "\\" + "MusicLibrary.json");
+			if(fileReader.ready()) {
+				InputStream tempIS = new FileInputStream(new File(folderPath + userName + "\\" + "MusicLibrary.json"));			
+				JsonReader reader = Json.createReader(tempIS);			
+				array = reader.readArray();			
+				reader.close();
+				artists = new String[array.size()];
+				for(int i = 0; i < array.size(); i++) {
+					JsonObject obj = array.getJsonObject(i);
+					artists[i] = obj.getString("Artist");
+				}
+			}
+			fileReader.close();
+			
+			if(artists != null && array != null) {
+				Sort sort = new Sort();
+				artists = sort.radixSort(artists);
+				sortedLib = "";
+				for (int i = 0; i < artists.length; i++) {
+					String artist = artists[i];
+					sortedLib += artist + "/";
+					for (int j = 0; j < array.size(); j++) {
+						JsonObject obj = array.getJsonObject(j);
+						if(obj.getString("Artist").equals(artist)) {
+							sortedLib += obj.getString("Title") + ",";
+						}
+					}
+				}
+			}		
+			return sortedLib;
+		}catch(Exception ex) {
+			return "false";
+		}
+	}
+	
+	public String sortLibraryByAlbum(String userName) throws Exception {
+		try {	
+			String[] albums = null;
+			JsonArray array = null;
+			String sortedLib = "";
+			FileReader fileReader = new FileReader(folderPath + userName + "\\" + "MusicLibrary.json");
+			if(fileReader.ready()) {
+				InputStream tempIS = new FileInputStream(new File(folderPath + userName + "\\" + "MusicLibrary.json"));			
+				JsonReader reader = Json.createReader(tempIS);			
+				array = reader.readArray();			
+				reader.close();
+				albums = new String[array.size()];
+				for(int i = 0; i < array.size(); i++) {
+					JsonObject obj = array.getJsonObject(i);
+					albums[i] = obj.getString("Album");
+				}
+			}
+			fileReader.close();
+			
+			if(albums != null) {
+				Sort sort = new Sort();
+				albums = sort.bubbleSort(albums);
+				sortedLib = "";
+				for (int i = 0; i < albums.length; i++) {
+					String album = albums[i];
+					sortedLib += album + "/";
+					for (int j = 0; j < array.size(); j++) {
+						JsonObject obj = array.getJsonObject(j);
+						if(obj.getString("Album").equals(album)) {
+							sortedLib += obj.getString("Title") + ",";
+						}
+					}
+				}
+			}
+			return sortedLib;
+		}catch(Exception ex) {
+			return "false";
 		}
 	}
 	
@@ -256,19 +311,7 @@ public class MusicLibrary {
 			}
 		}
 		fileReader.close();
-		System.out.println(songs);
 		return songs;
-	}
-	
-	public void printMetadata(File song) throws Exception {		
-		Mp3File file = new Mp3File(song);
-		ID3v2 tag = file.getId3v2Tag();
-    	System.out.println("Title: " + tag.getTitle());
-    	System.out.println("Artist: " + tag.getArtist());
-    	System.out.println("Genre: " + tag.getGenre() + " (" + tag.getGenreDescription() + ")");
-    	System.out.println("Album: " + tag.getAlbum());
-    	System.out.println("Year: " + tag.getYear());
-    	System.out.println("Lyrics: " + tag.getLyrics());
 	}
 	
 	@SuppressWarnings("resource")
@@ -391,6 +434,8 @@ public class MusicLibrary {
 				reader.close();
 				for(int i = 0; i < array.size(); i++) {
 					JsonObject obj = array.getJsonObject(i);
+					System.out.println(obj.getString("Title") + " = " + title);
+					System.out.println(obj.getString("Title").equalsIgnoreCase(title));
 					if(obj.getString("Title").equalsIgnoreCase(title)) {
 						objBuilder.add("Title", tag.getTitle());
 						objBuilder.add("Artist", tag.getArtist());
@@ -400,7 +445,7 @@ public class MusicLibrary {
 						objBuilder.add("Lyrics", tag.getLyrics());
 						JsonObject newObj = objBuilder.build();
 						
-						for(int j = 0; i < array.size(); i++) {
+						for(int j = 0; j < array.size(); j++) {
 							if(j == i) {
 								arrBuilder.add(newObj);
 							}else {

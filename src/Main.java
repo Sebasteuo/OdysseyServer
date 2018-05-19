@@ -11,6 +11,7 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonValue;
 
+import Sorts.Sort;
 import musicLibrary.IndexLibrary;
 import musicLibrary.MusicLibrary;
 import social.Friends;
@@ -31,7 +32,7 @@ public class Main {
 		try {
 			//Carga el archivo JSON en un arbol binario al iniciar el servidor
 			users = loadFileInBST();
-		}catch(NullPointerException ex) {}	
+		}catch(NullPointerException ex) {System.out.println("ERROR!");}	
 		
 		NewUser user = new NewUser(users);
 		user.setUserName("davepj07");
@@ -78,9 +79,10 @@ public class Main {
 		
 		ExistingUser exUser = new ExistingUser("davepj07", "p455w0rd", users);
 		exUser.logIn();
+		//System.out.println(exUser.getExistingUserNames());
 		
-		Sockets.conectar(users);
-	  /*System.out.println(exUser.getExistingUserNames());
+		//Sockets.conectar(users);
+	    /*System.out.println(exUser.getExistingUserNames());
 		
 		Recommendations messages = new Recommendations(users);			  
 		String[] message = {"davepj07","hack998","Esto es solo una prueba"}; 
@@ -95,6 +97,7 @@ public class Main {
 		friends.getFriendsList("sebas84");*/
 		
 		MusicLibrary mL = new MusicLibrary();
+<<<<<<< HEAD
 		mL.storeSong("The Only Place", "https://dl.last.fm/static/1526631790/131564291/5b375529319897e6224a051fa6f8068fb34190272b1ac1331c348cce5935156f/Best+Coast+-+The+Only+Place.mp3", "davepj07");
 		mL.deleteSong("Daisy", "davepj07");
 		mL.getUserLibrary("davepj07");
@@ -108,6 +111,23 @@ public class Main {
 		/*IndexLibrary index = new IndexLibrary();
 		BTree bTree = index.createTitleIndex();
 		bTree.print(bTree.getRoot());*/
+=======
+		//mL.storeSong("The Only Place", "https://dl.last.fm/static/1526746646/131564291/fe9bf2e1d0b4f782e61c82199c850a286392813711bc51b885b26d0cf5807c5c/Best+Coast+-+The+Only+Place.mp3", "davepj07");
+		//mL.storeSong("Get Got", "https://dl.last.fm/static/1526746646/131211148/c13dac65990cf5dfda50f17fb705701d7f97cbb3850fff9ed41759ec9747c86a/Death+Grips+-+Get+Got.mp3", "davepj07");
+		//mL.storeSong("Stay Useless", "https://dl.last.fm/static/1526631790/131564297/86c8cca45c5fe20e75c48a024213932a101017a0a1a181102390e1b349c869b0/Cloud+Nothings+-+Stay+Useless.mp3", "davepj07");
+		//mL.deleteSong("Daisy", "davepj07");
+		//mL.getUserLibrary("davepj07");
+		//File file = new File("C:\\Users\\david\\Documents\\MusicLibrary\\davepj07\\The Only Place.mp3");
+		//mL.syncMetadata(file, "davepj07");
+		//File file2 = new File("C:\\Users\\david\\Documents\\MusicLibrary\\davepj07\\Get Got.mp3");
+		//mL.syncMetadata(file2, "davepj07");
+		//File file3 = new File("C:\\Users\\david\\Documents\\MusicLibrary\\davepj07\\The Only Place.mp3");
+		//mL.syncMetadata(file3, "davepj07");
+		//String[] arr = {"Get Got","Lifetheory", "Other", "Let's Bring it All Together!", "2016", ""};
+		//mL.printMetadata(file);
+		//mL.updateMetadata(file, "davepj07", arr);
+		//mL.printMetadata(file);
+>>>>>>> cbdf2855958ad2b662214adfbba8d2d47b86951d
 	}
 	
 	public static BinarySearchTree loadFileInBST() {
