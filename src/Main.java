@@ -97,8 +97,8 @@ public class Main {
 		friends.getFriendsList("sebas84");*/
 		
 		MusicLibrary mL = new MusicLibrary();
-		mL.storeSong("The Only Place", "https://dl.last.fm/static/1526746646/131564291/fe9bf2e1d0b4f782e61c82199c850a286392813711bc51b885b26d0cf5807c5c/Best+Coast+-+The+Only+Place.mp3", "davepj07");
-		mL.storeSong("Get Got", "https://dl.last.fm/static/1526746646/131211148/c13dac65990cf5dfda50f17fb705701d7f97cbb3850fff9ed41759ec9747c86a/Death+Grips+-+Get+Got.mp3", "davepj07");
+		//mL.storeSong("The Only Place", "https://dl.last.fm/static/1526746646/131564291/fe9bf2e1d0b4f782e61c82199c850a286392813711bc51b885b26d0cf5807c5c/Best+Coast+-+The+Only+Place.mp3", "davepj07");
+		//mL.storeSong("Get Got", "https://dl.last.fm/static/1526746646/131211148/c13dac65990cf5dfda50f17fb705701d7f97cbb3850fff9ed41759ec9747c86a/Death+Grips+-+Get+Got.mp3", "davepj07");
 		//mL.storeSong("Stay Useless", "https://dl.last.fm/static/1526631790/131564297/86c8cca45c5fe20e75c48a024213932a101017a0a1a181102390e1b349c869b0/Cloud+Nothings+-+Stay+Useless.mp3", "davepj07");
 		//mL.deleteSong("Daisy", "davepj07");
 		//mL.getUserLibrary("davepj07");
@@ -112,14 +112,6 @@ public class Main {
 		//mL.printMetadata(file);
 		//mL.updateMetadata(file, "davepj07", arr);
 		//mL.printMetadata(file);
-		
-		IndexLibrary index = new IndexLibrary();
-		BinarySearchTree bTree = index.createLyricsIndex();
-		String[] arr = bTree.inorder();
-		for (int i = 0; i < arr.length; i++) {
-			System.out.println(arr[i]);
-		}
-		System.out.println();
 	}
 	
 	public static BinarySearchTree loadFileInBST() {

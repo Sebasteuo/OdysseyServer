@@ -89,7 +89,7 @@ public class Sort {
 	    
 		//Aumenta el contador del char en el indice
 		for(int i=0;i<arr.length;i++){
-			int charIndex = (arr[i].length()-1 < index) ? 0 : (arr[i].charAt(index) - lower)+1;
+			int charIndex = (arr[i].replace(" ", "").toLowerCase().length()-1 < index) ? 0 : (arr[i].replace(" ", "").toLowerCase().charAt(index) - lower)+1;
 			countArray[charIndex]++;
 		}
 	
@@ -98,7 +98,7 @@ public class Sort {
 		}
 	    
 		for(int i=arr.length-1;i>=0;i--){
-			int charIndex = (arr[i].length()-1 < index) ? 0 : (arr[i].charAt(index) - lower)+1;
+			int charIndex = (arr[i].replace(" ", "").toLowerCase().length()-1 < index) ? 0 : (arr[i].replace(" ", "").toLowerCase().charAt(index) - lower)+1;
 			tempArray[countArray[charIndex]-1] = arr[i];
 			countArray[charIndex]--;
 		}

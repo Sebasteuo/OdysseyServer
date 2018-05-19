@@ -27,6 +27,9 @@ import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.ID3v24Tag;
 import com.mpatric.mp3agic.Mp3File;
 
+import Sorts.Sort;
+import treeStructure.BTree;
+
 public class MusicLibrary {
 	private JsonObjectBuilder objBuilder;
 	private JsonArrayBuilder arrBuilder;
@@ -176,8 +179,6 @@ public class MusicLibrary {
 				lyrics = "Unknown";
 			}
 			
-			// System.out.println("Title: " + trackName + "\nArtist: " + artist + "\nGenre: " + genre + "\nAlbum: " + album + "\nYear: " + year + "\nLyrics: " + lyrics);
-			
 			String[] arr = {trackName, artist, genre, album, year, lyrics};
 			updateMetadata(song, userName, arr);
 		}else {
@@ -194,6 +195,103 @@ public class MusicLibrary {
 		}
 	}
 	
+	public String sortLibraryByTitle(String userName) throws Exception {
+		String[] songs = null;
+		FileReader fileReader = new FileReader(folderPath + userName + "\\" + "MusicLibrary.json");
+		if(fileReader.ready()) {
+			InputStream tempIS = new FileInputStream(new File(folderPath + userName + "\\" + "MusicLibrary.json"));			
+			JsonReader reader = Json.createReader(tempIS);			
+			JsonArray array = reader.readArray();			
+			reader.close();
+			songs = new String[array.size()];
+			for(int i = 0; i < array.size(); i++) {
+				JsonObject obj = array.getJsonObject(i);
+				songs[i] = obj.getString("Title");
+			}
+		}
+		fileReader.close();
+		
+		if(songs!=null) {
+			Sort sort = new Sort();
+			songs = sort.quickSort(songs);
+		}
+		String sortedLib = "";
+		for (int i = 0; i < songs.length; i++) {
+			sortedLib += songs[i] + "/";
+		}
+		return sortedLib;
+	}
+	
+	public String sortLibraryByArtist(String userName) throws Exception {
+		String[] artists = null;
+		JsonArray array = null;
+		FileReader fileReader = new FileReader(folderPath + userName + "\\" + "MusicLibrary.json");
+		if(fileReader.ready()) {
+			InputStream tempIS = new FileInputStream(new File(folderPath + userName + "\\" + "MusicLibrary.json"));			
+			JsonReader reader = Json.createReader(tempIS);			
+			array = reader.readArray();			
+			reader.close();
+			artists = new String[array.size()];
+			for(int i = 0; i < array.size(); i++) {
+				JsonObject obj = array.getJsonObject(i);
+				artists[i] = obj.getString("Artist");
+			}
+		}
+		fileReader.close();
+		
+		if(artists != null) {
+			Sort sort = new Sort();
+			artists = sort.radixSort(artists);
+		}
+		String sortedLib = "";
+		for (int i = 0; i < artists.length; i++) {
+			String artist = artists[i];
+			sortedLib += artist + "/";
+			for (int j = 0; j < array.size(); j++) {
+				JsonObject obj = array.getJsonObject(j);
+				if(obj.getString("Artist").equals(artist)) {
+					sortedLib += obj.getString("Title") + ",";
+				}
+			}
+		}
+		return sortedLib;
+	}
+	
+	public String sortLibraryByAlbum(String userName) throws Exception {
+		String[] albums = null;
+		JsonArray array = null;
+		FileReader fileReader = new FileReader(folderPath + userName + "\\" + "MusicLibrary.json");
+		if(fileReader.ready()) {
+			InputStream tempIS = new FileInputStream(new File(folderPath + userName + "\\" + "MusicLibrary.json"));			
+			JsonReader reader = Json.createReader(tempIS);			
+			array = reader.readArray();			
+			reader.close();
+			albums = new String[array.size()];
+			for(int i = 0; i < array.size(); i++) {
+				JsonObject obj = array.getJsonObject(i);
+				albums[i] = obj.getString("Album");
+			}
+		}
+		fileReader.close();
+		
+		if(albums != null) {
+			Sort sort = new Sort();
+			albums = sort.bubbleSort(albums);
+		}
+		String sortedLib = "";
+		for (int i = 0; i < albums.length; i++) {
+			String album = albums[i];
+			sortedLib += album + "/";
+			for (int j = 0; j < array.size(); j++) {
+				JsonObject obj = array.getJsonObject(j);
+				if(obj.getString("Album").equals(album)) {
+					sortedLib += obj.getString("Title") + ",";
+				}
+			}
+		}
+		return sortedLib;
+	}
+	
 	public String getUserLibrary(String userName) throws Exception {
 		String songs = "";
 		FileReader fileReader = new FileReader(folderPath + userName + "\\" + "MusicLibrary.json");
@@ -208,19 +306,7 @@ public class MusicLibrary {
 			}
 		}
 		fileReader.close();
-		System.out.println(songs);
 		return songs;
-	}
-	
-	public void printMetadata(File song) throws Exception {		
-		Mp3File file = new Mp3File(song);
-		ID3v2 tag = file.getId3v2Tag();
-    	System.out.println("Title: " + tag.getTitle());
-    	System.out.println("Artist: " + tag.getArtist());
-    	System.out.println("Genre: " + tag.getGenre() + " (" + tag.getGenreDescription() + ")");
-    	System.out.println("Album: " + tag.getAlbum());
-    	System.out.println("Year: " + tag.getYear());
-    	System.out.println("Lyrics: " + tag.getLyrics());
 	}
 	
 	@SuppressWarnings("resource")
