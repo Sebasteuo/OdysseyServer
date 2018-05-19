@@ -3,6 +3,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 import javax.json.JsonObject;
+
+import social.Friends;
+import social.Recommendations;
 import users.ExistingUser;
 
 import treeStructure.BinarySearchTree;
@@ -19,13 +22,13 @@ public class Sockets {
 			PrintWriter pw = new PrintWriter(client.getOutputStream(), true);
 			String name = scanner.nextLine();
 			System.out.println(name);
-			/*if (name.substring(0, 1).equals("0")) {
-				ExistingUser a = new ExistingUser("", "");
+			if (name.substring(0, 1).equals("0")) {
+				ExistingUser a = new ExistingUser("", "", users);
 				String b = a.getExistingUserNames();
 				String xml = "<b>" + b + "</b>";
 				pw.println(xml);
 			}
-			if (name.substring(0, 1).equals("1")) {
+			if (name.substring(0, 2).equals("10")) {
 				if ("hola".equals("hola")) {
 					String xml = "<true> Apodo libre </true>";
 					pw.println(xml);
@@ -34,11 +37,11 @@ public class Sockets {
 					int finedad = 0;
 					int fingenero = 0;
 					int fincontra = 0;
-					int j = 3;
+					int j = 4;
 					int x = 0;
 					String[] genero = new String[10];
 					String[] amigo = new String[10];
-					for (int i = 2; name.length() > i; i++) {
+					for (int i = 3; name.length() > i; i++) {
 						if (name.substring(i, j).equals("/")) {
 							if (x == 0) {
 								finick = j;
@@ -82,7 +85,7 @@ public class Sockets {
 						}
 						j++;
 					}
-					NewUser usuario = new NewUser();
+					NewUser usuario = new NewUser(users);
 					usuario.setUserName(name.substring(2, finick - 1));
 					usuario.setName(name.substring(finick, finame - 1));
 					usuario.setAge(Integer.parseInt(name.substring(finame, finedad - 1)));
@@ -95,17 +98,17 @@ public class Sockets {
 					pw.println("<false> Apodo utilizado </false>");
 				}
 			}
-			if (name.substring(0, 1).equals("2")) {
+			if (name.substring(0, 2).equals("12")) {
 				String nick = "";
 				String pass = "";
-				for (int i = 2; name.length() > i; i++) {
+				for (int i = 3; name.length() > i; i++) {
 					if (name.substring(i, i + 1).equals("/")) {
-						nick = name.substring(2, i);
+						nick = name.substring(3, i);
 						pass = name.substring(i + 1, name.length());
 					}
 				}
-				ExistingUser user = new ExistingUser(nick, pass);
-				boolean validacion = user.logIn(users);
+				ExistingUser user = new ExistingUser(nick, pass, users);
+				boolean validacion = user.logIn();
 				if (validacion) {
 					String xml = "<true> Apodo libre </true>";
 					pw.println(xml);
@@ -114,14 +117,14 @@ public class Sockets {
 					pw.println(xml);
 				}
 			}
-			if (name.substring(0, 1).equals("7")) {
+			if (name.substring(0, 2).equals("17")) {
 				String xml = "<true> Se ha enviado el mensaje </true>";
 				pw.println(xml);
-				ExistingUser a = new ExistingUser("", "");
+				Recommendations a = new Recommendations(users);
 				String[] message = new String[3];
 				int z = 0;
-				int x = 2;
-				for (int i = 2; name.length() > i; i++) {
+				int x = 3;
+				for (int i = 3; name.length() > i; i++) {
 					if (name.substring(i, i + 1).equals("/")) {
 						message[z] = name.substring(x, i);
 						x = i + 1;
@@ -132,13 +135,33 @@ public class Sockets {
 				message[z] = name.substring(x, name.length());
 				a.addMessages(message);
 			}
-			if (name.substring(0, 1).equals("8")) {
+			if (name.substring(0, 2).equals("18")) {
+				Recommendations a = new Recommendations(users);
+				String xml = "<true>" + a.getMessagesList(name.substring(3, name.length())) + "</true>";
+				pw.println(xml);
 			}
-			if (name.substring(0, 1).equals("9")) {
-				ExistingUser a = new ExistingUser("", "");
+			if (name.substring(0, 2).equals("19")) {
+				Friends a = new Friends(users);
 				String xml = "<true>" + a.getFriendsList(name.substring(2, name.length())) + "</true>";
 				pw.println(xml);
-			}*/
+			}
+			if ((name.substring(0, 2)).equals("23")) {
+				String[] friend = new String[3];
+				int z = 0;
+				int x = 3;
+				for (int i = 3; name.length() > i; i++) {
+					if (name.substring(i, i + 1).equals("/")) {
+						friend[z] = name.substring(x, i);
+						x = i + 1;
+						z++;
+					}
+				}
+				friend[z] = name.substring(x, name.length());
+				Friends a = new Friends(users);
+				String validador = a.addFriends(friend);
+				String xml = "<"+validador+"> Se ha enviado el mensaje </"+validador+">";
+				pw.println(xml);
+			}
 			client.close();
 		}
 	}
