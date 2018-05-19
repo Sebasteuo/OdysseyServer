@@ -94,16 +94,16 @@ public class Main {
 		if(wasAdded.equalsIgnoreCase("true")) friends.setUsersTrees(users = loadFileInBST()); // *** SE DEBE VOLVER A CARGAR EL ARCHIVO EN EL BST ***
 		friends.getFriendsList("sebas84");*/
 		
-		//MusicLibrary mL = new MusicLibrary();
-		//mL.storeSong("The Only Place", "https://dl.last.fm/static/1526631790/131564291/5b375529319897e6224a051fa6f8068fb34190272b1ac1331c348cce5935156f/Best+Coast+-+The+Only+Place.mp3", "davepj07");
-		//mL.deleteSong("Daisy", "davepj07");
-		//mL.getUserLibrary("davepj07");
-		//File file = new File("C:\\Users\\david\\Documents\\MusicLibrary\\Principal\\Get Got.mp3");
-		//mL.syncMetadata(file, "davepj07");
-		//String[] arr = {"Get Got","Lifetheory", "Other", "Let's Bring it All Together!", "2016", ""};
-		//mL.printMetadata(file);
-		//mL.updateMetadata(file, "davepj07", arr);
-		//mL.printMetadata(file);
+		MusicLibrary mL = new MusicLibrary();
+		mL.storeSong("The Only Place", "https://dl.last.fm/static/1526631790/131564291/5b375529319897e6224a051fa6f8068fb34190272b1ac1331c348cce5935156f/Best+Coast+-+The+Only+Place.mp3", "davepj07");
+		mL.deleteSong("Daisy", "davepj07");
+		mL.getUserLibrary("davepj07");
+		File file = new File("C:\\Users\\david\\Documents\\MusicLibrary\\Principal\\Get Got.mp3");
+		mL.syncMetadata(file, "davepj07");
+		String[] arr = {"Get Got","Lifetheory", "Other", "Let's Bring it All Together!", "2016", ""};
+		mL.printMetadata(file);
+		mL.updateMetadata(file, "davepj07", arr);
+		mL.printMetadata(file);
 		
 		/*IndexLibrary index = new IndexLibrary();
 		BTree bTree = index.createTitleIndex();
