@@ -110,7 +110,6 @@ public class Main {
 		/*IndexLibrary index = new IndexLibrary();
 		BTree bTree = index.createTitleIndex();
 		bTree.print(bTree.getRoot());*/
-		
 	}
 	
 	public static BinarySearchTree loadFileInBST() {

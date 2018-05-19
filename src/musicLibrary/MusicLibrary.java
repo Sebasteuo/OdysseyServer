@@ -6,12 +6,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
-import java.net.Socket;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Files;
@@ -69,51 +66,6 @@ public class MusicLibrary {
 			System.out.println("ERROR: La cancion ya se encuentra en la biblioteca.");
 			return;
 		}		
-	}
-	
-	@SuppressWarnings("resource")
-	public String storeSong(Socket socket, String userName) throws Exception{	
-		File song;
-		ObjectOutputStream OOS = new ObjectOutputStream(socket.getOutputStream());
-        ObjectInputStream OIS = new ObjectInputStream(socket.getInputStream());
-        FileOutputStream FOS = null;
-        byte[] buffer = new byte[100];
-        
-        // Lee el nombre del archivo
-        Object obj = OIS.readObject();
-        if (obj instanceof String) {
-        	song = new File(folderPath + "Principal\\" + obj.toString() + ".mp3");
-            FOS = new FileOutputStream(song);
-        } else {
-            return "false";
-        }
-        
-        // Lee el contenido del archivo.
-        Integer bytesRead = 0;
-        do {
-            obj = OIS.readObject();
-            if (!(obj instanceof Integer)) {
-                return "false";
-            }
-            bytesRead = (Integer) obj;
-            obj = OIS.readObject();
-            if (!(obj instanceof byte[])) {
-                return "false";
-            }
-            buffer = (byte[]) obj;
- 
-            //Escribe los datos en el archivo a guardar
-            FOS.write(buffer, 0, bytesRead);
-        } while (bytesRead == 100);
-        
-        FOS.close();
-        OIS.close();
-        OOS.close();
-        
-        File userSong = new File(folderPath + userName + "\\" + obj.toString() + ".mp3");
-        Files.copy(song.toPath(), userSong.toPath());
-        this.saveMetadata(song, userSong, userName); //Llama al metodo para guardar la metadata de la cancion
-        return "true";
 	}
 	
 	public void updateMetadata(File song, String userName, String[] metadata) throws Exception, IllegalArgumentException {

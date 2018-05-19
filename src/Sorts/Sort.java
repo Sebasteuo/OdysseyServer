@@ -1,5 +1,7 @@
 package Sorts;
 
+import java.util.Arrays;
+
 public class Sort {
 	
 	public Sort() {
@@ -12,13 +14,16 @@ public class Sort {
 	}
 	
 	public String[] radixSort(String[] arr) {
-		return arr;
+		return executeRadixSort(arr, 'a', 'z');
+	}
+	
+	public String[] bubbleSort(String[] arr) {
+		int arrLength = arr.length;
+		return executeBubbleSort(arr, arrLength);
 	}
 	
 	private String[] executeQuickSort(String[] arr, int firstPos, int lastPos){
 	     if (firstPos < lastPos){
-	         /* pi is partitioning index, arr[pi] is 
-	           now at right place */
 	         int pi = partition(arr, firstPos, lastPos); // pi es el indice de particion, arr[pi] ya esta en su lugar correcto
 	         executeQuickSort(arr, firstPos, pi-1);  // Recursivamente ordena los elementos
 	         executeQuickSort(arr, pi+1, lastPos);   // y despues de la particion
@@ -26,11 +31,39 @@ public class Sort {
 	     
 	     return arr;
 	}
-
+		  
+    private String[] executeRadixSort(String[] arr,char lower,char upper){
+         int maxIndex = 0;
+         for(int i=0;i<arr.length;i++){
+            if(arr[i].length()-1 > maxIndex){
+            	maxIndex = arr[i].length()-1;
+            }
+         }
+    
+         for(int i=maxIndex;i>=0;i--){
+        	 countingSort(arr,i,lower,upper);       
+         }
+         return arr;
+    }
+    
+    private String[] executeBubbleSort(String[] arr, int length) {
+    	String temp = "";
+    	for (int i = 1; i < arr.length; i++) {
+			for (int j = 0; j < arr.length-1; j++) {
+				if (arr[j].compareToIgnoreCase(arr[j+1]) > 0) {
+					temp = arr[j];
+					arr[j] = arr[j+1];
+					arr[j+1] = temp;
+				}
+			}
+		}
+    	return arr;
+    }
+    
 	/* Estabece el pivot y organiza los elementos mas 
 	 * pequeños que él a su izquierda y los mas grandes
 	 * que él a su derecha */
-	private int partition(String[] arr, int firstPos, int lastPos){
+	private int partition(String[] arr, int firstPos, int lastPos){ // Funcion aux del QuickSort
 	     String pivot = arr[lastPos]; 
 	     int i = (firstPos-1); // indice del elemento mas pequeño 
 	     for (int j=firstPos; j<lastPos; j++){
@@ -48,6 +81,30 @@ public class Sort {
 	
 	     return i+1;
 	}
+    
+	private void countingSort(String[] arr,int index,char lower,char upper){ // Funcion aux del RadixSort
+		int[] countArray = new int[(upper-lower)+2];
+		String[] tempArray = new String[arr.length];
+		Arrays.fill(countArray,0);
+	    
+		//Aumenta el contador del char en el indice
+		for(int i=0;i<arr.length;i++){
+			int charIndex = (arr[i].length()-1 < index) ? 0 : (arr[i].charAt(index) - lower)+1;
+			countArray[charIndex]++;
+		}
 	
-	 
+		for(int i=1;i<countArray.length;i++){
+			countArray[i] += countArray[i-1];
+		}
+	    
+		for(int i=arr.length-1;i>=0;i--){
+			int charIndex = (arr[i].length()-1 < index) ? 0 : (arr[i].charAt(index) - lower)+1;
+			tempArray[countArray[charIndex]-1] = arr[i];
+			countArray[charIndex]--;
+		}
+	    
+		for(int i=0;i<tempArray.length;i++){
+			arr[i] = tempArray[i];
+		}
+	}
 }
