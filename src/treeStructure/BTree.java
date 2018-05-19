@@ -141,8 +141,8 @@ public class BTree {
 		if(!node.isLeaf()) {//ingresa si el nodo no es una hoja
 			for(int j = 0; j <= node.getCountKeys()  ; j++) { //Este ciclo imprime el arbol recursivamente
 				if(node.getChild(j) != null) {
-				System.out.println();
-				print(node.getChild(j));
+					System.out.println();
+					print(node.getChild(j));
 				}
 			}
 		}

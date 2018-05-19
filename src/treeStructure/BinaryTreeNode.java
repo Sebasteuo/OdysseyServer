@@ -8,7 +8,7 @@ public class BinaryTreeNode {
 	private int height;
 	
 	public BinaryTreeNode() {
-		this.setKey("");
+		this.key = "";
 		this.value = "";
 		this.left = null;
 		this.right = null;
@@ -16,7 +16,7 @@ public class BinaryTreeNode {
 	}
 	
 	public BinaryTreeNode(String value, String key) {
-		this.setKey(key);
+		this.key = key;
 		this.value = value;
 		this.left = null;
 		this.right = null;

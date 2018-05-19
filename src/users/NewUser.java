@@ -19,8 +19,11 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonWriter;
 
+import treeStructure.BinarySearchTree;
+
 public class NewUser {
-	OutputStream ots;
+	private BinarySearchTree usersTree;
+	private OutputStream ots;
 	private JsonObjectBuilder userBuilder;
 	private JsonArrayBuilder musicalGenresBuilder;
 	private JsonArrayBuilder friendsBuilder;
@@ -28,11 +31,12 @@ public class NewUser {
 	private JsonArray users;
 	private String userName;
 
-	public NewUser() throws FileNotFoundException {
-		userBuilder = Json.createObjectBuilder();
-		musicalGenresBuilder = Json.createArrayBuilder();
-		friendsBuilder = Json.createArrayBuilder();
-		arrayBuilder = Json.createArrayBuilder();
+	public NewUser(BinarySearchTree usersTree) throws FileNotFoundException {
+		this.usersTree = usersTree;
+		this.userBuilder = Json.createObjectBuilder();
+		this.musicalGenresBuilder = Json.createArrayBuilder();
+		this.friendsBuilder = Json.createArrayBuilder();
+		this.arrayBuilder = Json.createArrayBuilder();
 	}
 
 	public void setUserName(String userName) {
@@ -72,41 +76,37 @@ public class NewUser {
 	}
 
 	public JsonObject signInUser() throws IOException {
-		String folderPath = System.getProperty("user.home") + "\\Documents\\MusicLibrary\\"+this.userName+"\\";
-		boolean folder = new File(folderPath).mkdirs();
-		userBuilder.add("Messages", Json.createArrayBuilder().build());
-		
-		try {
-			FileReader fileReader = new FileReader("usuarios.json");
-
-			if (fileReader.ready()) {
-				InputStream IS = new FileInputStream(new File("usuarios.json"));
-				JsonReader reader = Json.createReader(IS);
-				JsonArray oldArray = reader.readArray();
-				reader.close();
-				for (JsonValue i : oldArray) {
-					if (!i.asJsonObject().getString("UserName").equals(this.userName)) { // Autentica que el usuario no
-																							// exista registrado
+		if(this.usersTree.searchNode(this.userName) == null){ //Valida que el usuario no se encuentre dentro del arbol de registro
+			userBuilder.add("Messages", Json.createArrayBuilder().build());
+			
+			try {
+				FileReader fileReader = new FileReader("usuarios.json");
+				if (fileReader.ready()) {
+					InputStream IS = new FileInputStream(new File("usuarios.json"));
+					JsonReader reader = Json.createReader(IS);
+					JsonArray oldArray = reader.readArray();
+					reader.close();
+					for (JsonValue i : oldArray) {
 						arrayBuilder.add(i);
-					} else {
-						System.out.println("ERROR: El usuario ya existe!");
-						return null;
 					}
 				}
-			}
-			fileReader.close();
-		} catch (Exception ex) {
+				fileReader.close();
+			} catch (Exception ex) {}
+	
+			ots = new FileOutputStream("usuarios.json");
+			JsonObject user = userBuilder.build();
+			arrayBuilder.add(user);
+			users = arrayBuilder.build();
+			JsonWriter jsonWriter = Json.createWriter(ots);
+			jsonWriter.writeArray(users);
+			jsonWriter.close();
+	
+			return user;
+		}else {
+			System.out.println("ERROR: El usuario ya existe!");
+			return null;
 		}
-
-		ots = new FileOutputStream("usuarios.json");
-		JsonObject user = userBuilder.build();
-		arrayBuilder.add(user);
-		users = arrayBuilder.build();
-		JsonWriter jsonWriter = Json.createWriter(ots);
-		jsonWriter.writeArray(users);
-		jsonWriter.close();
-
-		return user;
+		
 	}
 
 	private String encodePassword(String password) throws Exception {

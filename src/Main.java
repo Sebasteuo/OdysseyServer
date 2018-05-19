@@ -11,7 +11,10 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonValue;
 
+import musicLibrary.IndexLibrary;
 import musicLibrary.MusicLibrary;
+import social.Friends;
+import social.Recommendations;
 import treeStructure.AVLTree;
 import treeStructure.BTree;
 import treeStructure.BinarySearchTree;
@@ -28,12 +31,9 @@ public class Main {
 		try {
 			//Carga el archivo JSON en un arbol binario al iniciar el servidor
 			users = loadFileInBST();
-			
-			//Obtiene el json correspondiente al usuario
-			JsonObject object = Json.createReader(new StringReader(users.searchNode("davepj07").getValue())).readObject();	
 		}catch(NullPointerException ex) {}	
 		
-		NewUser user = new NewUser();
+		NewUser user = new NewUser(users);
 		user.setUserName("davepj07");
 		user.setName("David Pereira");
 		user.setAge(21);
@@ -48,7 +48,7 @@ public class Main {
 			users.insertNode(toInsert.toString(), toInsert.getString("UserName"));			
 		}
 		
-		NewUser user2 = new NewUser();
+		NewUser user2 = new NewUser(users);
 		user2.setUserName("sebas84");
 		user2.setName("Sebastian Alba");
 		user2.setAge(21);
@@ -62,7 +62,7 @@ public class Main {
 			users.insertNode(toInsert2.toString(), toInsert2.getString("UserName"));			
 		}
 		
-		NewUser user3 = new NewUser();
+		NewUser user3 = new NewUser(users);
 		user3.setUserName("hack998");
 		user3.setName("Samuel Mendez");
 		user3.setAge(21);
@@ -76,21 +76,38 @@ public class Main {
 			users.insertNode(toInsert3.toString(), toInsert3.getString("UserName"));			
 		}		
 		
-		ExistingUser exUser = new ExistingUser("davepj07", "p455w0rd");
-		exUser.logIn(users);
-		//String[] message = {"dave","hack998","sebas se volvio a dormir"};
-		//exUser.addMessages(message);
-		//String[] friend = {"hack998", "davepj07"};
-		//exUser.addFriends(friend);
-		//Sockets.conectar(users);
+		ExistingUser exUser = new ExistingUser("davepj07", "p455w0rd", users);
+		exUser.logIn();
 		
-		MusicLibrary mL = new MusicLibrary();
-		mL.storeSong("Blackjack", "https://dl.last.fm/static/1526341973/131211147/aac86e980337f7fb6aba819a865de1a0b66bf9eb71e04dd05fe29a17a4641664/Death+Grips+-+Blackjack.mp3", "davepj07");
-		File file = new File("C:\\Users\\david\\Documents\\MusicLibrary\\davepj07\\Blackjack.mp3");
-		String[] arr = {"Get Got","Lifetheory", "DavePJ07", "Pop", "Let's Bring It All Together!"};
-		mL.printMetadata(file);
-		mL.updateMetadata(file, "davepj07", arr);
+		Sockets.conectar(users);
+	  /*System.out.println(exUser.getExistingUserNames());
+		
+		Recommendations messages = new Recommendations(users);			  
+		String[] message = {"davepj07","hack998","Esto es solo una prueba"}; 
+		messages.addMessages(message);									  // *** CADA VEZ QUE SE AGREGUE UN MENSAJE ***	
+		messages.setUsersTrees(users = loadFileInBST());				  // *** SE DEBE VOLVER A CARGAR EL ARCHIVO EN EL BST ***
+		messages.getMessagesList("hack998");
+		
+		String[] friend = {"sebas84", "davepj07"};
+		Friends friends = new Friends(users);
+		String wasAdded = friends.addFriends(friend);				   						  // *** CADA VEZ QUE SE AGREGUE UN AMIGO ***
+		if(wasAdded.equalsIgnoreCase("true")) friends.setUsersTrees(users = loadFileInBST()); // *** SE DEBE VOLVER A CARGAR EL ARCHIVO EN EL BST ***
+		friends.getFriendsList("sebas84");*/
+		
+		//MusicLibrary mL = new MusicLibrary();
+		//mL.storeSong("The Only Place", "https://dl.last.fm/static/1526631790/131564291/5b375529319897e6224a051fa6f8068fb34190272b1ac1331c348cce5935156f/Best+Coast+-+The+Only+Place.mp3", "davepj07");
+		//mL.deleteSong("Daisy", "davepj07");
+		//mL.getUserLibrary("davepj07");
+		//File file = new File("C:\\Users\\david\\Documents\\MusicLibrary\\Principal\\Get Got.mp3");
+		//mL.syncMetadata(file, "davepj07");
+		//String[] arr = {"Get Got","Lifetheory", "Other", "Let's Bring it All Together!", "2016", ""};
 		//mL.printMetadata(file);
+		//mL.updateMetadata(file, "davepj07", arr);
+		//mL.printMetadata(file);
+		
+		/*IndexLibrary index = new IndexLibrary();
+		BTree bTree = index.createTitleIndex();
+		bTree.print(bTree.getRoot());*/
 	}
 	
 	public static BinarySearchTree loadFileInBST() {

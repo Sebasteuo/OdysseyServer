@@ -15,7 +15,7 @@ public class SplayTree extends BinarySearchTree{
 		
 		root = splay(root, key);
 		
-		int comparisson = value.compareToIgnoreCase(root.getKey());
+		int comparisson = key.compareToIgnoreCase(root.getKey());
 		if(comparisson < 0) { //Value es menor que la raiz
 			BinaryTreeNode node = new BinaryTreeNode(value, key);
 			node.setLeft(root.getLeft());

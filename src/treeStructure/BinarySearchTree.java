@@ -2,13 +2,16 @@ package treeStructure;
 
 public class BinarySearchTree {
 	protected BinaryTreeNode root;
+	protected int size;
 
 	public BinarySearchTree() {
 		this.root = null;
+		this.size = 0;
 	}
 
 	public void insertNode(String value, String key) {
 		this.root = insert(root, value, key);
+		this.size += 1;
 	}
 
 	public BinaryTreeNode searchNode(String key) {
@@ -47,8 +50,9 @@ public class BinarySearchTree {
 		return node.getLeft() == null? node.getValue() : findMin(node.getLeft());
 	}
 		
-    public void inorder(){
-        inorder(root);
+    public String[] inorder(){
+    	String[] array = new String[size];
+        return inorder(root, array, 0);
     }
 
     public BinaryTreeNode rotateLeftLeft(BinaryTreeNode k2) {
@@ -79,12 +83,14 @@ public class BinarySearchTree {
 		return rotateRightRight(k3);
 	}
 
-    private void inorder(BinaryTreeNode r){
+    private String[] inorder(BinaryTreeNode r, String[] array, int count){
         if (r != null){
-            inorder(r.getLeft());
+            inorder(r.getLeft(), array, count);
+            //array[count] = r.getValue();
             System.out.print(r.getValue() +"\n");
-            inorder(r.getRight());
+            inorder(r.getRight(), array, count);
         }
+        return array;
     }
 
     private BinaryTreeNode insert(BinaryTreeNode root, String value, String key) {

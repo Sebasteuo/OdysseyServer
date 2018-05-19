@@ -9,8 +9,9 @@ import treeStructure.BinarySearchTree;
 import users.NewUser;
 
 public class Sockets {
+	@SuppressWarnings("resource")
 	public static void conectar(BinarySearchTree users) throws Exception {
-		ServerSocket serversocket = new ServerSocket(7000);
+		ServerSocket serversocket = new ServerSocket(6000);
 		System.out.println("Listo");
 		while (true) {
 			Socket client = serversocket.accept();
@@ -18,7 +19,7 @@ public class Sockets {
 			PrintWriter pw = new PrintWriter(client.getOutputStream(), true);
 			String name = scanner.nextLine();
 			System.out.println(name);
-			if (name.substring(0, 1).equals("0")) {
+			/*if (name.substring(0, 1).equals("0")) {
 				ExistingUser a = new ExistingUser("", "");
 				String b = a.getExistingUserNames();
 				String xml = "<b>" + b + "</b>";
@@ -137,7 +138,7 @@ public class Sockets {
 				ExistingUser a = new ExistingUser("", "");
 				String xml = "<true>" + a.getFriendsList(name.substring(2, name.length())) + "</true>";
 				pw.println(xml);
-			}
+			}*/
 			client.close();
 		}
 	}
