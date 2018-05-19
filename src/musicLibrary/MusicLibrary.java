@@ -10,7 +10,6 @@ import java.io.OutputStream;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.nio.file.Files;
 import java.util.Scanner;
 
@@ -22,6 +21,8 @@ import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
 import javax.json.JsonValue;
 import javax.json.JsonWriter;
+
+import org.apache.commons.io.FileUtils;
 
 import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.ID3v24Tag;
@@ -47,21 +48,11 @@ public class MusicLibrary {
 		}
 	}
 	
-	public void storeSong(String songName, String url, String userName) throws Exception{	
-		URLConnection connection = new URL(url).openConnection();
+	public void storeSong(String songName, byte[] buf, String userName) throws Exception{
 		File song = new File(folderPath + "Principal\\" + songName + ".mp3"); //Crea el archivo donde se guardara la cancion
 		File userSong = new File(folderPath + userName + "\\" + songName + ".mp3");
 		if(!song.exists()) { //Comprueba si la cancion ya existe en el directorio
-			InputStream IS = connection.getInputStream(); //Obtiene los datos recibidos por el url
-			OutputStream OS = new FileOutputStream(song); //Convierte el archivo en editable para escribir la informacion
-			
-			byte[] buffer = new byte[4096]; 
-			int length;
-			while((length = IS.read(buffer)) > 0) {
-				OS.write(buffer, 0, length); //Escribe los datos en el archivo mp3
-			}
-			System.out.println("Download Complete!");
-			OS.close(); //Cierra el archivo 
+			FileUtils.writeByteArrayToFile(song, buf);
 			Files.copy(song.toPath(), userSong.toPath()); //Copia la cancion en la biblioteca especifica del usuario
 			this.saveMetadata(song, userSong, userName); //Llama al metodo para guardar la metadata de la cancion
 		}else {
