@@ -176,7 +176,7 @@ public class MusicLibrary {
 				lyrics = "Unknown";
 			}
 			
-			System.out.println("Title: " + trackName + "\nArtist: " + artist + "\nGenre: " + genre + "\nAlbum: " + album + "\nYear: " + year + "\nLyrics: " + lyrics);
+			// System.out.println("Title: " + trackName + "\nArtist: " + artist + "\nGenre: " + genre + "\nAlbum: " + album + "\nYear: " + year + "\nLyrics: " + lyrics);
 			
 			String[] arr = {trackName, artist, genre, album, year, lyrics};
 			updateMetadata(song, userName, arr);
@@ -343,6 +343,8 @@ public class MusicLibrary {
 				reader.close();
 				for(int i = 0; i < array.size(); i++) {
 					JsonObject obj = array.getJsonObject(i);
+					System.out.println(obj.getString("Title") + " = " + title);
+					System.out.println(obj.getString("Title").equalsIgnoreCase(title));
 					if(obj.getString("Title").equalsIgnoreCase(title)) {
 						objBuilder.add("Title", tag.getTitle());
 						objBuilder.add("Artist", tag.getArtist());
@@ -352,7 +354,7 @@ public class MusicLibrary {
 						objBuilder.add("Lyrics", tag.getLyrics());
 						JsonObject newObj = objBuilder.build();
 						
-						for(int j = 0; i < array.size(); i++) {
+						for(int j = 0; j < array.size(); j++) {
 							if(j == i) {
 								arrBuilder.add(newObj);
 							}else {
