@@ -3,11 +3,13 @@ package treeStructure;
 public class BTree {
 	
 	private BTreeNode root;
+	private int size;
 	private static int order;
 	
 	public BTree(int order) {
 		BTree.order = order;
 		this.root = new BTreeNode(order, null);
+		this.size = 0;
 	}
 	
 	public void setRoot(BTreeNode root) {
@@ -69,6 +71,7 @@ public class BTree {
 		}else {
 			nonFullInsert(r, key);
 		}
+		this.size++;
 	}
 	
 	public void nonFullInsert(BTreeNode node, String key) {
@@ -133,16 +136,18 @@ public class BTree {
 		}
 	}
 	
-	public void print(BTreeNode node){
+	int count = -1;
+	public void print(BTreeNode node, String[] arr){
 		for(int i = 0; i < node.getCountKeys(); i++){
 			System.out.print(node.getValue(i)+" " ); //Aqui imprime el nodo raiz
+			arr[this.count] = node.getValue(i);
 		}
 
 		if(!node.isLeaf()) {//ingresa si el nodo no es una hoja
 			for(int j = 0; j <= node.getCountKeys()  ; j++) { //Este ciclo imprime el arbol recursivamente
 				if(node.getChild(j) != null) {
 					System.out.println();
-					print(node.getChild(j));
+					print(node.getChild(j), arr);
 				}
 			}
 		}

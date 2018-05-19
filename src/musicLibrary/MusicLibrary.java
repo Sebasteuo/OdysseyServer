@@ -29,6 +29,8 @@ import com.mpatric.mp3agic.ID3v24Tag;
 import com.mpatric.mp3agic.Mp3File;
 
 import Sorts.Sort;
+import treeStructure.AVLTree;
+import treeStructure.BTree;
 
 public class MusicLibrary {
 	private JsonObjectBuilder objBuilder;
@@ -231,7 +233,18 @@ public class MusicLibrary {
 				artists = new String[array.size()];
 				for(int i = 0; i < array.size(); i++) {
 					JsonObject obj = array.getJsonObject(i);
-					artists[i] = obj.getString("Artist");
+					String artist = obj.getString("Artist");
+					boolean bool = false;
+					for (int j = 0; j < artists.length; j++) {
+						if(artist.equalsIgnoreCase(artists[j])) {
+							bool = true;
+						}
+					}
+					if (!bool) {
+						artists[i] = artist;
+					}else {
+						artists[i] = "";
+					}
 				}
 			}
 			fileReader.close();
@@ -241,18 +254,22 @@ public class MusicLibrary {
 				artists = sort.radixSort(artists);
 				sortedLib = "";
 				for (int i = 0; i < artists.length; i++) {
-					String artist = artists[i];
-					sortedLib += artist + "/";
-					for (int j = 0; j < array.size(); j++) {
-						JsonObject obj = array.getJsonObject(j);
-						if(obj.getString("Artist").equals(artist)) {
-							sortedLib += obj.getString("Title") + ",";
+					if(artists[i]!="") {
+						String artist = artists[i];
+						sortedLib += artist + "/";
+					
+						for (int j = 0; j < array.size(); j++) {
+							JsonObject obj = array.getJsonObject(j);
+							if(obj.getString("Artist").equals(artist)) {
+								sortedLib += obj.getString("Title") + ",";
+							}
 						}
 					}
 				}
 			}		
 			return sortedLib;
 		}catch(Exception ex) {
+			ex.printStackTrace();
 			return "false";
 		}
 	}
@@ -271,7 +288,18 @@ public class MusicLibrary {
 				albums = new String[array.size()];
 				for(int i = 0; i < array.size(); i++) {
 					JsonObject obj = array.getJsonObject(i);
-					albums[i] = obj.getString("Album");
+					String album = obj.getString("Album");
+					boolean bool = false;
+					for (int j = 0; j < albums.length; j++) {
+						if(album.equalsIgnoreCase(albums[j])) {
+							bool = true;
+						}
+					}
+					if (!bool) {
+						albums[i] = album;
+					}else {
+						albums[i] = "";
+					}
 				}
 			}
 			fileReader.close();
@@ -281,12 +309,14 @@ public class MusicLibrary {
 				albums = sort.bubbleSort(albums);
 				sortedLib = "";
 				for (int i = 0; i < albums.length; i++) {
-					String album = albums[i];
-					sortedLib += album + "/";
-					for (int j = 0; j < array.size(); j++) {
-						JsonObject obj = array.getJsonObject(j);
-						if(obj.getString("Album").equals(album)) {
-							sortedLib += obj.getString("Title") + ",";
+					if(albums[i] != "") {
+						String album = albums[i];
+						sortedLib += album + "/";
+						for (int j = 0; j < array.size(); j++) {
+							JsonObject obj = array.getJsonObject(j);
+							if(obj.getString("Album").equals(album)) {
+								sortedLib += obj.getString("Title") + ",";
+							}
 						}
 					}
 				}
@@ -295,6 +325,34 @@ public class MusicLibrary {
 		}catch(Exception ex) {
 			return "false";
 		}
+	}
+	
+	public String searchByTitle(String userName, String title) {
+		IndexLibrary index = new IndexLibrary();
+		BTree indexTitles = index.createTitleIndex();
+		//String[] array = indexTitles.inorder();
+		String songs = "";
+		return "";
+	}
+	
+	public String searchByArtist(String userName, String artist) {
+		IndexLibrary index = new IndexLibrary();
+		AVLTree indexArtist = index.createArtistIndex();
+		String[] array = indexArtist.inorder();
+		String songs = "";
+		for (int i = 0; i < array.length; i++) {
+			JsonObject obj = Json.createReader(new StringReader(array[i])).readObject();
+			if (obj.getString("Artist").equalsIgnoreCase(artist)){
+				songs += obj.getString("Title") + "/";
+			}
+		}
+		
+		if(songs != "") {
+			return songs;
+		}else {
+			return "false";
+		}
+		
 	}
 	
 	public String getUserLibrary(String userName) throws Exception {
