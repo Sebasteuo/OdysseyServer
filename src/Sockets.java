@@ -1,9 +1,14 @@
+import java.io.File;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Base64;
 import java.util.Scanner;
 import javax.json.JsonObject;
 
+import org.apache.commons.io.FileUtils;
+
+import musicLibrary.MusicLibrary;
 import social.Friends;
 import social.Recommendations;
 import users.ExistingUser;
@@ -14,14 +19,13 @@ import users.NewUser;
 public class Sockets {
 	@SuppressWarnings("resource")
 	public static void conectar(BinarySearchTree users) throws Exception {
-		ServerSocket serversocket = new ServerSocket(6000);
+		ServerSocket serversocket = new ServerSocket(5000);
 		System.out.println("Listo");
 		while (true) {
 			Socket client = serversocket.accept();
 			Scanner scanner = new Scanner(client.getInputStream());
 			PrintWriter pw = new PrintWriter(client.getOutputStream(), true);
 			String name = scanner.nextLine();
-			System.out.println(name);
 			if (name.substring(0, 1).equals("0")) {
 				ExistingUser a = new ExistingUser("", "", users);
 				String b = a.getExistingUserNames();
@@ -72,14 +76,13 @@ public class Sockets {
 								int v = fingenero + 1;
 								int z = 0;
 								int m = fincontra;
-								for (int c = 0; name.substring(fingenero, name.length()).length() > c; c++)
-								{
+								for (int c = 0; name.substring(fingenero, name.length()).length() > c; c++) {
 									if (name.substring(v - 1, v).equals(",")) {
 										amigo[z] = name.substring(m, v - 1);
 										m = c + fingenero + 1;
 										z++;
 									}
-								v++;
+									v++;
 								}
 							}
 						}
@@ -130,7 +133,7 @@ public class Sockets {
 						x = i + 1;
 						z++;
 					}
-					
+
 				}
 				message[z] = name.substring(x, name.length());
 				a.addMessages(message);
@@ -143,6 +146,21 @@ public class Sockets {
 			if (name.substring(0, 2).equals("19")) {
 				Friends a = new Friends(users);
 				String xml = "<true>" + a.getFriendsList(name.substring(3, name.length())) + "</true>";
+				pw.println(xml);
+			}
+			if (name.substring(0, 2).equals("20")) {
+				MusicLibrary ml = new MusicLibrary();
+				String xml = "";
+				if (name.substring(2, 3).equals("1")) {
+					xml = "<true>" + ml.sortLibraryByTitle(name.substring(4)) + "</true>";
+				}
+				if (name.substring(2, 3).equals("2")) {
+					xml = "<true>" + ml.sortLibraryByArtist(name.substring(4)) + "</true>";
+				}
+				if (name.substring(2, 3).equals("3")) {
+					xml = "<true>" + ml.sortLibraryByAlbum(name.substring(4)) + "</true>";
+				}
+				System.out.println(xml);
 				pw.println(xml);
 			}
 			if ((name.substring(0, 2)).equals("23")) {
@@ -159,25 +177,47 @@ public class Sockets {
 				friend[z] = name.substring(x, name.length());
 				Friends a = new Friends(users);
 				String validador = a.addFriends(friend);
-				String xml = "<"+validador+"> Se ha enviado el mensaje </"+validador+">";
+				String xml = "<" + validador + "> Se ha enviado el mensaje </" + validador + ">";
 				pw.println(xml);
+			}
+			if ((name.substring(0, 2)).equals("33")) {
+				int u = 0;
+				int p = 0;
+				int g = 0;
+				for (int q = 3; q < name.length(); q++) {
+					if (name.substring(q, q + 1).equals("/")) {
+						if (g == 0) {
+							u = q;
+							g++;
+						} else {
+							p = q;
+							break;
+						}
+					}
+				}
+				String nick = name.substring(2, u);
+				String cancion = name.substring(u + 1, p);
+				System.out.println(nick + "/" + cancion);
+				byte[] buf = Base64.getDecoder().decode(name.substring(p + 1, name.length() - 2));
+				MusicLibrary ml = new MusicLibrary();
+				ml.storeSong(cancion, buf, nick);
 			}
 			client.close();
 		}
 	}
 }
-//SOCKETS LOS QUE HAY Y LOS FALTANTES
-//obtener amigo 0,
-//crea usuario 10
-//validarregistro12
-//cargararchivosycarpetas13
-//sincronizar bibliotecadeusuario14
-//metadata15
-//calificaciondecancion16
-//mensages17
-//recomendaciones18
-//listadeamigos19
-//ordenamientoBiblioteca20
-//reproducirMusica21
-//buscarCanciones22
-//agregar amigo 23
+// SOCKETS LOS QUE HAY Y LOS FALTANTES
+// obtener amigo 0,
+// crea usuario 10
+// validarregistro12
+// cargararchivosycarpetas13
+// sincronizar bibliotecadeusuario14
+// metadata15
+// calificaciondecancion16
+// mensages17
+// recomendaciones18
+// listadeamigos19
+// ordenamientoBiblioteca20
+// reproducirMusica21
+// buscarCanciones22
+// agregar amigo 23
