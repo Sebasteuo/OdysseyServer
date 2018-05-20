@@ -112,8 +112,22 @@ public class IndexLibrary {
 	 * @return
 	 */
 	public BinarySearchTree createLyricsIndex() {
-				
-		
+		try {	
+			FileReader fileReader = new FileReader(folderPath + "davepj07\\MusicLibrary.json");
+			if(fileReader.ready()) {
+				InputStream IS = new FileInputStream(new File(folderPath + "davepj07\\MusicLibrary.json"));
+				JsonReader reader = Json.createReader(IS);
+				JsonArray array = reader.readArray();
+				reader.close();
+				for (int i = 0; i < array.size(); i++) {
+					JsonObject obj = array.getJsonObject(i);
+					String lyric = obj.getString("Lyrics");
+					this.lyricsIndex.insertNode(obj.toString(), lyric);
+				}
+			}
+			fileReader.close();
+		}catch(Exception ex) {}
+
 		return lyricsIndex;
 	}
 }

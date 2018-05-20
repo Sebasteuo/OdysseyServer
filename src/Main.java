@@ -106,18 +106,18 @@ public class Main {
 		
 		MusicLibrary mL = new MusicLibrary();
 		//mL.storeSong("The Only Place", "https://dl.last.fm/static/1526631790/131564291/5b375529319897e6224a051fa6f8068fb34190272b1ac1331c348cce5935156f/Best+Coast+-+The+Only+Place.mp3", "davepj07");
-		//mL.deleteSong("Daisy", "davepj07");
+		//mL.deleteSong("Get Got", "davepj07");
 		//mL.getUserLibrary("davepj07");
-		//File file = new File("C:\\Users\\david\\Documents\\MusicLibrary\\Principal\\Get Got.mp3");
+		//File file = new File("C:\\Users\\david\\Documents\\MusicLibrary\\Principal\\The Only Place.mp3");
 		//mL.syncMetadata(file, "davepj07");
 		//String[] arr = {"Get Got","Lifetheory", "Other", "Let's Bring it All Together!", "2016", ""};
 		//mL.printMetadata(file);
 		//mL.updateMetadata(file, "davepj07", arr);
 		//mL.printMetadata(file);
-		
 		/*IndexLibrary index = new IndexLibrary();
 		BTree bTree = index.createTitleIndex();
 		bTree.print(bTree.getRoot());*/
+		System.out.println(mL.searchByLyrics("At the mountains"));
 	}
 	/**
 	 * Se encarga de cargar el archivo de registro en el arbol binario de busqueda. Los usuarios que estan en el registro se cargan aca.

@@ -31,6 +31,7 @@ import com.mpatric.mp3agic.Mp3File;
 import Sorts.Sort;
 import treeStructure.AVLTree;
 import treeStructure.BTree;
+import treeStructure.BinarySearchTree;
 import treeStructure.SplayTree;
 /**
  * Clase encargada de gestionar la biblioteca musical del usuario y general
@@ -397,10 +398,10 @@ public class MusicLibrary {
 	}
 	/**
 	 * Se encarga de buscar por nombre del artista, utilizando el arbol AVL
-	 * Búsqueda de canciones por Artista mediante árbol tipo AVL.
-	Indexa el árbol AVL, que contiene los artistas como llaves, crea un array que guarda una arreglo ordenado de esos artistas, 
-	recorre ese arreglo en busca del artista que se ingreso, cuando lo encuentra, obtiene sus canciones relacionadas a ese artista,
- 	los concatena a un storing y eso se retorna
+	 * Búsqueda de canciones por Artista mediante Arbol tipo AVL.
+	 * Indexa el Arbol AVL, que contiene los artistas como llaves, crea un array que guarda una arreglo ordenado de esos artistas, 
+	 * recorre ese arreglo en busca del artista que se ingreso, cuando lo encuentra, obtiene sus canciones relacionadas a ese artista,
+ 	 * los concatena a un storing y eso se retorna
 	 * @param userName
 	 * @param artist
 	 * @return songs
@@ -425,9 +426,9 @@ public class MusicLibrary {
 		}	
 	}
 	/**
-	 * Indexa el árbol Splay, que contiene los Albunes como llaves, crea un array que guarda una arreglo ordenado de esos artistas,
-	 *  recorre ese arreglo en busca del álbum que se ingreso, cuando lo encuentra, obtiene sus canciones relacionadas a ese álbum,
-los concatena a un storing y eso se retorna
+	 * Indexa el Arbol Splay, que contiene los Albumes como llaves, crea un array que guarda una arreglo ordenado de esos artistas,
+	 *  recorre ese arreglo en busca del Album que se ingreso, cuando lo encuentra, obtiene sus canciones relacionadas a ese Album,
+	 * los concatena a un storing y eso se retorna
 	 * Se encarga de buscar por nombre de album, utilizando arbol Splay
 	 * @param userName
 	 * @param album
@@ -452,6 +453,32 @@ los concatena a un storing y eso se retorna
 		}
 		
 	}
+	/**
+	 * Indexa el Arbol Binario de Busqueda, que contiene la letra de la cancion como llave, crea un array ordenado de estos elementos,
+	 * lo recorre para buscar fragmento a fragmento en la letra coincidencias con la frase o palabra que ingreso el usaurio. Al encontrarlo,
+	 * concatena el titulo de la cancion a el string que se retornara al final de la funcion.
+	 * @param lyrics
+	 * @return string
+	 */
+	public String searchByLyrics(String lyrics) {
+		IndexLibrary index = new IndexLibrary();	
+		BinarySearchTree indexLyrics = index.createLyricsIndex();
+		String[] lyricsArr = indexLyrics.inorder();
+		String songs = "";
+		for (int i = 0; i < lyricsArr.length; i++) {
+			String value = lyricsArr[i];
+			for (int j = 0; j <= value.length()-lyrics.length(); j++) {
+				if(value.substring(j, j+lyrics.length()).equalsIgnoreCase(lyrics)) {
+					JsonObject obj = Json.createReader(new StringReader(value)).readObject();
+					String val = obj.getString("Title");
+					songs += val + "/";
+					break;
+				}
+			}
+		}
+		return songs;
+	}
+	
 	/**
 	 * Se encarga de obtener la lista de canciones del usuario en su biblioteca
 	 * @param userName
