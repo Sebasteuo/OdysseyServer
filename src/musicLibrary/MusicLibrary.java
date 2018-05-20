@@ -216,6 +216,27 @@ public class MusicLibrary {
 		File file = new File(folderPath + userName + "\\" + songTitle + ".mp3");
 		if(file.exists()) {
 			Files.delete(file.toPath());
+			try {
+				FileReader fileReader = new FileReader(folderPath + userName + "\\" + "MusicLibrary.json");
+				if(fileReader.ready()) {
+					InputStream tempIS = new FileInputStream(new File(folderPath + userName + "\\" + "MusicLibrary.json"));			
+					JsonReader reader = Json.createReader(tempIS);			
+					JsonArray array = reader.readArray();			
+					reader.close();
+					for(int i = 0; i < array.size(); i++) {
+						JsonObject obj = array.getJsonObject(i);
+						if(!obj.getString("Title").equalsIgnoreCase(songTitle)) {
+							arrBuilder.add(obj);
+						}
+					}
+					finalArray = arrBuilder.build();
+					OutputStream tempOS = new FileOutputStream(new File(folderPath + userName + "\\" + "MusicLibrary.json"));
+					JsonWriter writer = Json.createWriter(tempOS);
+					writer.writeArray(finalArray);
+					writer.close();
+				}
+				fileReader.close();
+			}catch(Exception ex) {}
 		}else {
 			System.out.println("La cancion no se encuentra en la biblioteca.");
 		}
@@ -377,11 +398,10 @@ public class MusicLibrary {
 	}
 	/**
 	 * Se encarga de buscar el titulo de la cancion, utilizando el arbol B
-	 * @param userName
 	 * @param title
 	 * @return songs
 	 */
-	public String searchByTitle(String userName, String title) {
+	public String searchByTitle(String title) {
 		IndexLibrary index = new IndexLibrary();
 		BTree indexTitles = index.createTitleIndex();
 		String[] array = indexTitles.traverseTree();
@@ -402,11 +422,10 @@ public class MusicLibrary {
 	 * Indexa el Arbol AVL, que contiene los artistas como llaves, crea un array que guarda una arreglo ordenado de esos artistas, 
 	 * recorre ese arreglo en busca del artista que se ingreso, cuando lo encuentra, obtiene sus canciones relacionadas a ese artista,
  	 * los concatena a un storing y eso se retorna
-	 * @param userName
 	 * @param artist
 	 * @return songs
 	 */
-	public String searchByArtist(String userName, String artist) {
+	public String searchByArtist(String artist) {
 		IndexLibrary index = new IndexLibrary();
 		AVLTree indexArtist = index.createArtistIndex();
 		String[] array = indexArtist.inorder();
@@ -430,11 +449,10 @@ public class MusicLibrary {
 	 *  recorre ese arreglo en busca del Album que se ingreso, cuando lo encuentra, obtiene sus canciones relacionadas a ese Album,
 	 * los concatena a un storing y eso se retorna
 	 * Se encarga de buscar por nombre de album, utilizando arbol Splay
-	 * @param userName
 	 * @param album
 	 * @return songs
 	 */
-	public String searchByAlbum(String userName, String album) {
+	public String searchByAlbum(String album) {
 		IndexLibrary index = new IndexLibrary();
 		SplayTree indexAlbum = index.createAlbumIndex();
 		String[] array = indexAlbum.inorder();
@@ -500,6 +518,10 @@ public class MusicLibrary {
 		}
 		fileReader.close();
 		return songs;
+	}
+	
+	public void addRating(String songTitle, int newVote) {
+		
 	}
 	/**
 	 * Se encarga de obtener las letras de las canciones, haciendo la consulta al proveedor externo de la metadata
@@ -639,8 +661,6 @@ public class MusicLibrary {
 				reader.close();
 				for(int i = 0; i < array.size(); i++) {
 					JsonObject obj = array.getJsonObject(i);
-					System.out.println(obj.getString("Title") + " = " + title);
-					System.out.println(obj.getString("Title").equalsIgnoreCase(title));
 					if(obj.getString("Title").equalsIgnoreCase(title)) {
 						objBuilder.add("Title", tag.getTitle());
 						objBuilder.add("Artist", tag.getArtist());
