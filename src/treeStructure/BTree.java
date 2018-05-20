@@ -1,25 +1,47 @@
 package treeStructure;
-
+/**
+ * Clase encargada de definir estructura del arbol B
+ * @author Sebastian Alba
+ * @author David Pereira
+ * @author Randall Mendez
+ *
+ */
 public class BTree {
 	
 	private BTreeNode root;
 	private int size;
 	private static int order;
-	
+	int count = 0;
+	String[] arr;
+	/**
+	 * Constructor de la clase
+	 * @param order
+	 */
 	public BTree(int order) {
 		BTree.order = order;
 		this.root = new BTreeNode(order, null);
 		this.size = 0;
 	}
-	
+	/**
+	 * Establece raiz del arbol
+	 * @param root
+	 */
 	public void setRoot(BTreeNode root) {
 		this.root = root;
 	}
-	
+	/**
+	 * Obtiene la raiz del arbol
+	 * @return
+	 */
 	public BTreeNode getRoot() {
 		return this.root;
 	}
-	
+	/**
+	 * Se encarga de dividir de la pagina en caso de que este llena
+	 * @param nodeA
+	 * @param i
+	 * @param nodeB
+	 */
 	public void split(BTreeNode nodeA, int i, BTreeNode nodeB) {
 		BTreeNode nodeC = new BTreeNode(order, null);
 		
@@ -55,7 +77,10 @@ public class BTree {
 		
 		nodeA.setCountKeys(nodeA.getCountKeys()+1);
 	}	
-	
+	/**
+	 * Se encarga de insertar el nodo en el arbol B
+	 * @param key
+	 */
 	public void insertNode(String key) {
 		BTreeNode r = this.root;
 		if(r.getCountKeys() == (2*order-1)) { // la pagina esta llena
@@ -73,7 +98,11 @@ public class BTree {
 		}
 		this.size++;
 	}
-	
+	/**
+	 * Se encarga de realizar la insercion si la pagina no esta llena, funcion auxiliar del inserNode
+	 * @param node
+	 * @param key
+	 */
 	public void nonFullInsert(BTreeNode node, String key) {
 		int numKeys = node.getCountKeys();
 		
@@ -100,7 +129,12 @@ public class BTree {
 			nonFullInsert(node.getChild(j), key);
 		}
 	}
-	
+	/**
+	 * Se encarga de buscar el nodo en el aerbol B, a partir de su llave
+	 * @param root
+	 * @param key
+	 * @return BTreeNode
+	 */
 	public BTreeNode searchNode(BTreeNode root, String key) {
 		int i = 0;
 		while(root.getCountKeys() > i && key.compareToIgnoreCase(root.getValue(i)) > 0) {
@@ -118,7 +152,10 @@ public class BTree {
 			return searchNode(root.getChild(i), key);
 		}
 	}
-	
+	/**
+	 * Se encarga de borrar la llave de la pagina
+	 * @param key
+	 */
 	public void deleteKey(String key) {
 		BTreeNode temp = new BTreeNode(order, null);
 		temp = searchNode(this.root, key);
@@ -136,14 +173,19 @@ public class BTree {
 		}
 	}
 	
-	int count = 0;
-	String[] arr;
+	/**
+	 * LLama a la funcion principal para recorrer el arbol
+	 * @return array
+	 */
 	public String[] traverseTree() {
 		arr = new String[this.size];
 		traverse(this.root);
 		return arr;
 	}
-	
+	/**
+	 * Funcion principal para recorrer el arbol
+	 * @param node
+	 */
 	public void traverse(BTreeNode node){
 		for(int i = 0; i < node.getCountKeys(); i++){
 			//System.out.print(node.getValue(i)+ " "); //Aqui imprime el nodo raiz

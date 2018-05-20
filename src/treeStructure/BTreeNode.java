@@ -1,5 +1,10 @@
 package treeStructure;
-
+/**
+ * Clase encargada de crear el nodo del arbol B
+ * @author Sebastian Alba
+ * @author David Pereira
+ * @author Randall Mendez *
+ */
 public class BTreeNode {
 	
 	private int order; //determina el orden del arbol
@@ -8,7 +13,11 @@ public class BTreeNode {
 	private BTreeNode[] child; //contiene las referencias a los hijos
 	private boolean isLeaf; 
 	private BTreeNode parent; //referencia al nodo padre
-	
+	/**
+	 * Constructor de la clase
+	 * @param order
+	 * @param parent
+	 */
 	public BTreeNode(int order, BTreeNode parent) {
 		this.order = order;
 		this.parent = parent;
@@ -18,7 +27,10 @@ public class BTreeNode {
 		this.countKeys = 0;
 		
 	}
-
+	/**
+	 * GETTERS Y SETTERS
+	 * @return
+	 */
 	public int getOrder() {
 		return order;
 	}

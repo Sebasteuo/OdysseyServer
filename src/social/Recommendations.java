@@ -14,18 +14,33 @@ import javax.json.JsonWriter;
 
 import treeStructure.BinarySearchTree;
 import treeStructure.BinaryTreeNode;
-
+/**
+ * Clase encargada de  gestionar recomendaciones que se le hacen al usuario
+ * @author Sebastian Alba
+ * @author David Pereira
+ * @author Randall Mendez 
+ */
 public class Recommendations {
 	private BinarySearchTree usersTree;
-	
+	/**
+	 * Constructor de la clase
+	 * @param usersTree
+	 */
 	public Recommendations(BinarySearchTree usersTree) {
 		this.usersTree = usersTree;
 	}
-	
+	/**
+	 * Settea el arbol 
+	 * @param usersTree
+	 */
 	public void setUsersTrees(BinarySearchTree usersTree) {
 		this.usersTree = usersTree;
 	}
-	
+	/**
+	 * Se encarga de añadir nuevos mensajes al registro del usuario
+	 * @param message
+	 * @throws Exception
+	 */
 	public void addMessages(String[] message) throws Exception {
 		//["emisor", "receptor", "mensaje"]
 		//[{"emisor":"", "mensaje", ""}, {"emisor":"", "mensaje":""}]
@@ -60,7 +75,12 @@ public class Recommendations {
 		writer.writeArray(finalArray);
 		writer.close();
 	}
-
+	/**
+	 * Se encarga de obtener los mensajes que tiene el usuario en sesion
+	 * @param userName
+	 * @return string
+	 * @throws Exception
+	 */
 	public String getMessagesList(String userName) throws Exception {
 		BinaryTreeNode userData = usersTree.searchNode(userName);								// Obtiene el nodo que contiene el usuario
 		JsonObject obj = Json.createReader(new StringReader(userData.getValue())).readObject(); // llama al valor que contiene, y lo parsea a JsonObject

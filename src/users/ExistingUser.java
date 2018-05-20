@@ -8,18 +8,32 @@ import javax.json.JsonObject;
 
 import treeStructure.BinarySearchTree;
 import treeStructure.BinaryTreeNode;
-
+/**
+ * Clase encargada de definir un usuario existente en el registro
+ * @author Sebastian Alba
+ * @author David Pereira
+ * @author Randall Mendez 
+ */
 public class ExistingUser {
 	private String userName;
 	private String password;
 	private BinarySearchTree usersTree;
-	
+	/**
+	 * Constructor de la clase
+	 * @param userName
+	 * @param password
+	 * @param usersTree
+	 */
 	public ExistingUser(String userName, String password, BinarySearchTree usersTree) {
 		this.userName = userName;
 		this.password = password;
 		this.usersTree = usersTree;
 	}
-	
+	/**
+	 * Se encarga de validar el inicio de sesion del usuario
+	 * @return
+	 * @throws Exception
+	 */
 	public boolean logIn() throws Exception{
 		BinaryTreeNode userData = this.usersTree.searchNode(this.userName);
 		if(userData != null) {																		   // Obtiene el valor del Nodo
@@ -37,7 +51,11 @@ public class ExistingUser {
 			return false;
 		}		
 	}
-
+	/**
+	 * Se encarga de obtener el nickname de los usuario existentes en el registro
+	 * @return string
+	 * @throws Exception
+	 */
 	public String getExistingUserNames() throws Exception {
 		String[] array = this.usersTree.inorder();
 		String existingUsers = "";
@@ -47,7 +65,12 @@ public class ExistingUser {
 		}
 		return existingUsers;
 	}
-	
+	/**
+	 * Se encarga de codificar la contraseña  con protocolo Hash MD5
+	 * @param password
+	 * @return string
+	 * @throws Exception
+	 */
 	private String encodePassword(String password) throws Exception {
 		MessageDigest md = MessageDigest.getInstance("MD5");
 		md.update(password.getBytes());

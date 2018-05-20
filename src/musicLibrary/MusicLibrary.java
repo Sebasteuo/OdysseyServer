@@ -32,7 +32,13 @@ import Sorts.Sort;
 import treeStructure.AVLTree;
 import treeStructure.BTree;
 import treeStructure.SplayTree;
-
+/**
+ * Clase encargada de gestionar la biblioteca musical del usuario y general
+ * @author Sebastian Alba
+ * @author David Pereira
+ * @author Randall Mendez
+ *
+ */
 public class MusicLibrary {
 	private JsonObjectBuilder objBuilder;
 	private JsonArrayBuilder arrBuilder;
@@ -40,7 +46,10 @@ public class MusicLibrary {
 	
 	private String home = System.getProperty("user.home"); //Obtiene la ruta principal del sistema (C://user//xxxx//)
 	private String folderPath = home + "\\Documents\\MusicLibrary\\"; //Ruta donde se almacenaran las canciones
-	
+	/**
+	 * Constructor de la clase
+	 * @throws Exception
+	 */
 	public MusicLibrary() throws Exception {
 		this.objBuilder = Json.createObjectBuilder();
 		this.arrBuilder = Json.createArrayBuilder();
@@ -50,7 +59,13 @@ public class MusicLibrary {
 			folder.mkdirs();
 		}
 	}
-	
+	/**
+	 * Metodo para guardar canciones cargadas desde el cliente
+	 * @param songName NOMBRE DE CANCION	
+	 * @param buf     BYTES DE LA CANCION
+	 * @param userName   USUARIO EN SESION
+	 * @throws Exception
+	 */
 	public void storeSong(String songName, byte[] buf, String userName) throws Exception{
 		File song = new File(folderPath + "Principal\\" + songName + ".mp3"); //Crea el archivo donde se guardara la cancion
 		File userSong = new File(folderPath + userName + "\\" + songName + ".mp3");
@@ -63,7 +78,14 @@ public class MusicLibrary {
 			return;
 		}		
 	}
-	
+	/**
+	 * Se encarga de actualizar la metadata de las canciones que contiene el usuario en su biblioteca propia.
+	 * @param song
+	 * @param userName
+	 * @param metadata
+	 * @throws Exception
+	 * @throws IllegalArgumentException
+	 */
 	public void updateMetadata(File song, String userName, String[] metadata) throws Exception, IllegalArgumentException {
 		Mp3File mp3File = new Mp3File(song);
 		ID3v2 tag = mp3File.getId3v2Tag();
@@ -109,7 +131,12 @@ public class MusicLibrary {
 			}
 		}
 	}
-	
+	/**
+	 * Metodo para sincronizar la metadata con el proveedor externo, utilizando el API MUSICXMATCH, la cual provee la letra de la cancion.
+	 * @param song
+	 * @param userName
+	 * @throws Exception
+	 */
 	@SuppressWarnings("resource")
 	public void syncMetadata(File song, String userName) throws Exception {
 		if(song.exists()) {	
@@ -178,7 +205,12 @@ public class MusicLibrary {
 			System.out.println("ERROR: La cancion no se encuentra en la biblioteca.");
 		}
 	}
-	
+	/**
+	 * Metodo encargado de borrar las canciones en la biblioteca del usuaio, en la propia.
+	 * @param songTitle
+	 * @param userName
+	 * @throws Exception
+	 */
 	public void deleteSong(String songTitle, String userName) throws Exception{
 		File file = new File(folderPath + userName + "\\" + songTitle + ".mp3");
 		if(file.exists()) {
@@ -187,7 +219,12 @@ public class MusicLibrary {
 			System.out.println("La cancion no se encuentra en la biblioteca.");
 		}
 	}
-	
+	/**
+	 * Se encarga de ordenar la biblioteca propia del usuario por titulo de la cancion, utilizando QuickSort
+	 * @param userName
+	 * @return string 
+	 * @throws Exception
+	 */
 	public String sortLibraryByTitle(String userName) throws Exception {
 		try {
 			String[] songs = null;
@@ -219,7 +256,12 @@ public class MusicLibrary {
 			return "false";
 		}
 	}
-	
+	/**
+	 * Se encarga de ordenar la biblioteca propia del usario, por nombre de artista, usando RadixSort
+	 * @param userName
+	 * @return string
+	 * @throws Exception
+	 */
 	public String sortLibraryByArtist(String userName) throws Exception {
 		try {
 			String[] artists = null;
@@ -274,7 +316,12 @@ public class MusicLibrary {
 			return "false";
 		}
 	}
-	
+	/**
+	 * Se encarga de ordenar la biblioteca propia del usuario por nombre de album, usando Bubble sort
+	 * @param userName
+	 * @return string
+	 * @throws Exception
+	 */
 	public String sortLibraryByAlbum(String userName) throws Exception {
 		try {	
 			String[] albums = null;
@@ -327,7 +374,12 @@ public class MusicLibrary {
 			return "false";
 		}
 	}
-	
+	/**
+	 * Se encarga de buscar el titulo de la cancion, utilizando el arbol B
+	 * @param userName
+	 * @param title
+	 * @return songs
+	 */
 	public String searchByTitle(String userName, String title) {
 		IndexLibrary index = new IndexLibrary();
 		BTree indexTitles = index.createTitleIndex();
@@ -343,7 +395,12 @@ public class MusicLibrary {
 		}
 		return songs;
 	}
-	
+	/**
+	 * Se encarga de buscar por nombre del artista, utilizando el arbol AVL
+	 * @param userName
+	 * @param artist
+	 * @return songs
+	 */
 	public String searchByArtist(String userName, String artist) {
 		IndexLibrary index = new IndexLibrary();
 		AVLTree indexArtist = index.createArtistIndex();
@@ -363,7 +420,12 @@ public class MusicLibrary {
 			return "false";
 		}	
 	}
-	
+	/**
+	 * Se encarga de buscar por nombre de album, utilizando arbol Splay
+	 * @param userName
+	 * @param album
+	 * @return songs
+	 */
 	public String searchByAlbum(String userName, String album) {
 		IndexLibrary index = new IndexLibrary();
 		SplayTree indexAlbum = index.createAlbumIndex();
@@ -383,7 +445,12 @@ public class MusicLibrary {
 		}
 		
 	}
-	
+	/**
+	 * Se encarga de obtener la lista de canciones del usuario en su biblioteca
+	 * @param userName
+	 * @return songs
+	 * @throws Exception
+	 */
 	public String getUserLibrary(String userName) throws Exception {
 		String songs = "";
 		FileReader fileReader = new FileReader(folderPath + userName + "\\" + "MusicLibrary.json");
@@ -400,7 +467,12 @@ public class MusicLibrary {
 		fileReader.close();
 		return songs;
 	}
-	
+	/**
+	 * Se encarga de obtener las letras de las canciones, haciendo la consulta al proveedor externo de la metadata
+	 * @param trackID
+	 * @return lyrics
+	 * @throws Exception
+	 */
 	@SuppressWarnings("resource")
 	private String getSongLyrics (int trackID) throws Exception {
 		String request = "http://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id=" + trackID + "&apikey=0a181cdc1ba6d0a216b779cf8ad585df";
@@ -418,7 +490,13 @@ public class MusicLibrary {
 		String lyrics = jsonObj.get("message").asJsonObject().get("body").asJsonObject().get("lyrics").asJsonObject().getString("lyrics_body");
 		return lyrics;
 	}
-	
+	/**
+	 * Se encarga de guardar la metadata en un archivo musical mp3 y en el JSON
+	 * @param song
+	 * @param userSong
+	 * @param userName
+	 * @throws Exception
+	 */
 	private void saveMetadata(File song, File userSong, String userName) throws Exception {
 		Mp3File mp3File = new Mp3File(song);
 		
@@ -510,7 +588,13 @@ public class MusicLibrary {
 		Files.deleteIfExists(newFile.toPath());
 		Files.copy(file.toPath(), newFile.toPath());
 	}
-	
+	/**
+	 * Se encarga de escribir la nueva informacion de la metadata en el archivo JSOn de las canciones
+	 * @param title
+	 * @param tag
+	 * @param userName
+	 * @throws Exception
+	 */
 	private void editJsonDoc(String title, ID3v2 tag, String userName) throws Exception {
 		try {
 			FileReader fileReader = new FileReader(folderPath + userName + "\\" + "MusicLibrary.json");
@@ -552,7 +636,10 @@ public class MusicLibrary {
 			fileReader.close();
 		}catch(FileNotFoundException ex) {}
 	}
-	
+	/**
+	 * Se encarga de renombrar archivos
+	 * @param mp3File
+	 */
 	private void renameFiles(Mp3File mp3File) {
 		File originalFile = new File(mp3File.getFilename());
 		File backupFile = new File(mp3File.getFilename() + ".bak");

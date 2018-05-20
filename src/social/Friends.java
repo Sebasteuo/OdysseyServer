@@ -14,18 +14,35 @@ import javax.json.JsonWriter;
 
 import treeStructure.BinarySearchTree;
 import treeStructure.BinaryTreeNode;
-
+/**
+ * Clase encargada de gestionar los amigos que tenga el usuario en su registro
+ * @author Sebastian Alba
+ * @author David Pereira
+ * @author Randall Mendez
+ *
+ */
 public class Friends {
 	private BinarySearchTree usersTree;
-	
+	/**
+	 * Constructor de la clase
+	 * @param usersTree
+	 */
 	public Friends(BinarySearchTree usersTree) {
 		this.usersTree = usersTree;
 	}
-	
+	/**
+	 * Se encarga de setear el arbol de usuarios
+	 * @param usersTree
+	 */
 	public void setUsersTrees(BinarySearchTree usersTree) {
 		this.usersTree = usersTree;
 	}
-	
+	/**
+	 * Se encarga de agregar amigos al registro del usuario
+	 * @param friend
+	 * @return string
+	 * @throws Exception
+	 */
 	public String addFriends(String[] friend) throws Exception {
 		//["usuario", "amigo"]
 		//["amigo1", "amigo2", "amigo3"]
@@ -72,7 +89,12 @@ public class Friends {
 			return "ya";
 		}
 	}
-	
+	/**
+	 * Se encarga de obtener la lista de amigos del usuario en sesion
+	 * @param userName
+	 * @return string
+	 * @throws Exception
+	 */
 	public String getFriendsList(String userName) throws Exception {
 		BinaryTreeNode userData = usersTree.searchNode(userName);								// Obtiene el nodo que contiene el usuario
 		JsonObject obj = Json.createReader(new StringReader(userData.getValue())).readObject(); // llama al valor que contiene, y lo parsea a JsonObject
@@ -84,7 +106,13 @@ public class Friends {
 		}
 		return friendsList;
 	}
-	
+	/**
+	 * Se encarga de verificar si el amigo ya esta agregado
+	 * @param userName
+	 * @param friend
+	 * @return boolean
+	 * @throws Exception
+	 */
 	private boolean friendAlreadyExists(String userName, String friend) throws Exception {
 		BinaryTreeNode userData = usersTree.searchNode(userName);								// Obtiene el nodo que contiene el usuario
 		JsonObject obj = Json.createReader(new StringReader(userData.getValue())).readObject(); // llama al valor que contiene, y lo parsea a JsonObject

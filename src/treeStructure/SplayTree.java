@@ -1,12 +1,21 @@
 package treeStructure;
-
+/**
+ * Clase encargada de definir el arbol Splay
+ * @author Sebastian Alba
+ * @author David Pereira
+ * @author Randall Mendez 
+ */
 public class SplayTree extends BinarySearchTree{
-	
+	/**
+	 * Constructor de la clase
+	 */
 	public SplayTree() {
 		this.root = null;
 		this.size = 0;
 	}
-	
+	/**
+	 * Se encarga de insertar el nodo en el arbol splay
+	 */
 	@Override
 	public void insertNode(String value, String key) {
 		if(root == null) {
@@ -39,7 +48,9 @@ public class SplayTree extends BinarySearchTree{
 		}
 		
 	}
-	
+	/**
+	 * Se encarga de buscar el nodo en el arbol
+	 */
 	@Override
 	public BinaryTreeNode searchNode(String key) {
 		root = splay(root, key);
@@ -50,7 +61,9 @@ public class SplayTree extends BinarySearchTree{
 			return null;
 		}
 	}
-	
+	/**
+	 * Se encarga de borrar el nodo del arbol
+	 */
 	@Override 
 	public void deleteNode(String key) {
 		if(root == null) {
@@ -73,7 +86,12 @@ public class SplayTree extends BinarySearchTree{
 		}
 		//else: el nodo no se encontro en el arbol, no hay nada que eliminar
 	}
-	
+	/**
+	 * Se encarga de realizar la operacion splay(LLeva los nodos hasta la raiz)
+	 * @param node
+	 * @param key
+	 * @return BinaryTreeNode
+	 */
 	private BinaryTreeNode splay(BinaryTreeNode node, String key) {
 		if(node == null) {
 			return null;

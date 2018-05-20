@@ -22,10 +22,20 @@ import treeStructure.BinaryTreeNode;
 import treeStructure.SplayTree;
 import users.ExistingUser;
 import users.NewUser;
-
+/**
+ * Clase principal, donde se inicia ejecucion del servidor.
+ * @author Sebastian Alba
+ * @author David Pereira
+ * @author Randall Mendez
+ *
+ */
 public class Main {
 	static BinarySearchTree users = new BinarySearchTree();
-	
+	/**
+	 * Metodo que se encarga de iniciar el servidor.
+	 * @param args
+	 * @throws Exception para evitar que los sockets se caigan
+	 */
 	public static void main(String args[]) throws Exception {		
 		
 		try {
@@ -109,7 +119,10 @@ public class Main {
 		BTree bTree = index.createTitleIndex();
 		bTree.print(bTree.getRoot());*/
 	}
-	
+	/**
+	 * Se encarga de cargar el archivo de registro en el arbol binario de busqueda. Los usuarios que estan en el registro se cargan aca.
+	 * @return arbol binario
+	 */
 	public static BinarySearchTree loadFileInBST() {
 		BinarySearchTree bst = new BinarySearchTree();	
 		try {

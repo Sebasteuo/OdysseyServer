@@ -12,9 +12,20 @@ import users.ExistingUser;
 
 import treeStructure.BinarySearchTree;
 import users.NewUser;
-
+/**
+ * Se encarga de la conexion con el cliente.
+ * @author Sebastian Alba
+ * @author David Pereira
+ * @author Randall Mendez
+ *
+ */
 public class Sockets {
 	@SuppressWarnings("resource")
+	/**
+	 * Inicia la conexion y cierra la conexion, y llama las operaciones del servidor.
+	 * @param users , es el arbol binario que contiene el registro de los usuarios
+	 * @throws Exception, para evitar que se caigan lo sockets
+	 */
 	public static void conectar(BinarySearchTree users) throws Exception {
 		ServerSocket serversocket = new ServerSocket(5000);
 		System.out.println("Listo");

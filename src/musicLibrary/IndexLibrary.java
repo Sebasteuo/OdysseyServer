@@ -14,7 +14,13 @@ import treeStructure.AVLTree;
 import treeStructure.BTree;
 import treeStructure.BinarySearchTree;
 import treeStructure.SplayTree;
-
+/**
+ * Se encarga de iniciar los indices en los arboles, los indices de la biblioteca.
+ * @author Sebastian Alba
+ * @author David Pereira
+ * @author Randall Mendez
+ *LOS INDEX SON PARA LA BIBLIOTECA MUSICAL, COOPERAN EN LA BUSQUEDA DE CANCIONES
+ */
 public class IndexLibrary {
 	private BTree titleIndex;
 	private AVLTree artistIndex;
@@ -23,14 +29,19 @@ public class IndexLibrary {
 	
 	private String home = System.getProperty("user.home"); //Obtiene la ruta principal del sistema (C://user//xxxx//)
 	private String folderPath = home + "\\Documents\\MusicLibrary\\"; //Ruta donde se almacenaran las canciones
-	
+	/**
+	 * Constructor de la clase
+	 */
 	public IndexLibrary() {
 		this.titleIndex = new BTree(16);
 		this.artistIndex = new AVLTree();
 		this.albumIndex = new SplayTree();
 		this.lyricsIndex = new BinarySearchTree();
 	}
-	
+	/**
+	 * Crea el arbol B que contiene el indice de los titulos,
+	 * @return
+	 */
 	public BTree createTitleIndex() {
 		try {	
 			FileReader fileReader = new FileReader(folderPath + "Principal\\MusicLibrary.json");
@@ -50,7 +61,10 @@ public class IndexLibrary {
 
 		return this.titleIndex;
 	}
-	
+	/**
+	 * Crea el arbol AVL que contiene el indice de los titulos
+	 * @return
+	 */
 	public AVLTree createArtistIndex() {
 		try {	
 			FileReader fileReader = new FileReader(folderPath + "Principal\\MusicLibrary.json");
@@ -70,7 +84,10 @@ public class IndexLibrary {
 
 		return this.artistIndex;
 	}
-	
+	/**
+	 * Crea el arbol Splay que contiene el indice de los albunes
+	 * @return
+	 */
 	public SplayTree createAlbumIndex() {
 		try {	
 			FileReader fileReader = new FileReader(folderPath + "Principal\\MusicLibrary.json");
@@ -90,7 +107,10 @@ public class IndexLibrary {
 
 		return this.albumIndex;
 	}
-	
+	/**
+	 * Crea el arbol binario que contiene el indice de las letras
+	 * @return
+	 */
 	public BinarySearchTree createLyricsIndex() {
 				
 		
