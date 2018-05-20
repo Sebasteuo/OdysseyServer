@@ -136,18 +136,26 @@ public class BTree {
 		}
 	}
 	
-	int count = -1;
-	public void print(BTreeNode node, String[] arr){
+	int count = 0;
+	String[] arr;
+	public String[] traverseTree() {
+		arr = new String[this.size];
+		traverse(this.root);
+		return arr;
+	}
+	
+	public void traverse(BTreeNode node){
 		for(int i = 0; i < node.getCountKeys(); i++){
-			System.out.print(node.getValue(i)+" " ); //Aqui imprime el nodo raiz
-			arr[this.count] = node.getValue(i);
+			//System.out.print(node.getValue(i)+ " "); //Aqui imprime el nodo raiz
+			this.arr[this.count] = node.getValue(i);
+			this.count ++;
 		}
 
 		if(!node.isLeaf()) {//ingresa si el nodo no es una hoja
 			for(int j = 0; j <= node.getCountKeys()  ; j++) { //Este ciclo imprime el arbol recursivamente
 				if(node.getChild(j) != null) {
-					System.out.println();
-					print(node.getChild(j), arr);
+					//System.out.println();
+					traverse(node.getChild(j));
 				}
 			}
 		}

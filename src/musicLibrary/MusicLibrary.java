@@ -331,9 +331,17 @@ public class MusicLibrary {
 	public String searchByTitle(String userName, String title) {
 		IndexLibrary index = new IndexLibrary();
 		BTree indexTitles = index.createTitleIndex();
-		//String[] array = indexTitles.inorder();
+		String[] array = indexTitles.traverseTree();
 		String songs = "";
-		return "";
+		for (int i = 0; i < array.length; i++) {
+			String value = array[i];
+			for (int j = 0; j <= value.length()-title.length(); j++) {
+				if(value.substring(j, j+title.length()).equalsIgnoreCase(title)) {
+					songs += value + "/";
+				}
+			}
+		}
+		return songs;
 	}
 	
 	public String searchByArtist(String userName, String artist) {
@@ -342,10 +350,11 @@ public class MusicLibrary {
 		String[] array = indexArtist.inorder();
 		String songs = "";
 		for (int i = 0; i < array.length; i++) {
-				JsonObject obj = Json.createReader(new StringReader(array[i])).readObject();
-				if (obj.getString("Artist").equalsIgnoreCase(artist)){					
-					songs += obj.getString("Title") + "/";
-				}
+			System.out.println(array[i]);
+			JsonObject obj = Json.createReader(new StringReader(array[i])).readObject();
+			if (obj.getString("Artist").equalsIgnoreCase(artist)){					
+				songs += obj.getString("Title") + "/";
+			}
 		}
 		
 		if(songs != "") {
@@ -354,6 +363,7 @@ public class MusicLibrary {
 			return "false";
 		}	
 	}
+	
 	public String searchByAlbum(String userName, String album) {
 		IndexLibrary index = new IndexLibrary();
 		SplayTree indexAlbum = index.createAlbumIndex();
