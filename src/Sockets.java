@@ -22,6 +22,12 @@ import users.NewUser;
 public class Sockets {
 	@SuppressWarnings("resource")
 	/**
+	 * Se deben crear los sockets correspondientes para cada requerimiento.(Con
+	Randall) con el metodo .conectar, recibe un numero y varios strings, en este caso son máximo 6 parámetros, por nombre dude usuario,
+ 	contraseña (Al crear usuarios).Inicia el TCP Client con el local host y el work que es el entero que recibe, va a decir que va 
+ 	enviar y que va hacer con lo que recibe. Hay 23 Sockets, uno para cada funcionalidad, el 13 es el que tiene los treats, 
+ 	este enviado la canción, el archivo al servidor.Obtiene los bytes de un archivo y los convierte en storing de base 64, 
+ 	luego ese storing lo codifica en UTF8. Y lo envía por treats para que no se congele la app
 	 * Inicia la conexion y cierra la conexion, y llama las operaciones del servidor.
 	 * @param users , es el arbol binario que contiene el registro de los usuarios
 	 * @throws Exception, para evitar que se caigan lo sockets

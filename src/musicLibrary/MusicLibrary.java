@@ -397,6 +397,10 @@ public class MusicLibrary {
 	}
 	/**
 	 * Se encarga de buscar por nombre del artista, utilizando el arbol AVL
+	 * Búsqueda de canciones por Artista mediante árbol tipo AVL.
+	Indexa el árbol AVL, que contiene los artistas como llaves, crea un array que guarda una arreglo ordenado de esos artistas, 
+	recorre ese arreglo en busca del artista que se ingreso, cuando lo encuentra, obtiene sus canciones relacionadas a ese artista,
+ 	los concatena a un storing y eso se retorna
 	 * @param userName
 	 * @param artist
 	 * @return songs
@@ -421,6 +425,9 @@ public class MusicLibrary {
 		}	
 	}
 	/**
+	 * Indexa el árbol Splay, que contiene los Albunes como llaves, crea un array que guarda una arreglo ordenado de esos artistas,
+	 *  recorre ese arreglo en busca del álbum que se ingreso, cuando lo encuentra, obtiene sus canciones relacionadas a ese álbum,
+los concatena a un storing y eso se retorna
 	 * Se encarga de buscar por nombre de album, utilizando arbol Splay
 	 * @param userName
 	 * @param album

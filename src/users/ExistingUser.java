@@ -67,6 +67,12 @@ public class ExistingUser {
 	}
 	/**
 	 * Se encarga de codificar la contraseña  con protocolo Hash MD5
+	 * Almacenamiento de contraseña
+	Se guardará la contraseña en un documento JSON, el cual se accede
+	mediante el árbol binario de búsqueda, se almacenará encriptada mediante el
+	HASH MD5. Esto se hace en NewUser, recibe como parámetro el usuario dl nuevo 
+	usuarios la contraseña, y toma la contraseña y la codifica con el método, 
+	la retorna encriptada para almacenarla en el JSON, con editJsonDoc en el ExistingUser
 	 * @param password
 	 * @return string
 	 * @throws Exception

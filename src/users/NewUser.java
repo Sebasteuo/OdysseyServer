@@ -1,5 +1,18 @@
 package users;
-
+/**
+ * Registro y Autenticación de usuarios
+	Se debe crear una clase que valide si un usuario existe, y si la contraseña
+	que se ingresó es correcta. El de registro es new user y el inicio de sesión existing user,
+ 	en la clase Existing User se define un usuario existente en el registro, hay un método de 
+ 	inicio de sesión LogIN,, otro método que obtiene el nickname de los usuarios existentes en 
+ 	el registro con getExisting User, otro método que codifica la contraseña con has MD5. Esto 
+ 	es que codifica la contraseña ingresada al registrarse, guarda esa codificación y luego al 
+ 	querer iniciar sesión codifica esa ingresada y las comprara
+	EN la clase New User se define un nuevo usuario, con el método setUserName se sestea el 
+	nombre del usuario, la edad, generosa favoritos, céntraseña CODIFICADA, lista de amigos. 
+	Luego signUser() Verifica el registro del usuario e ingresa su información en el JSON, 
+	encodePassword codifica la contraseña y la guarda.
+ */
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

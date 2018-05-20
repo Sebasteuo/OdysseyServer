@@ -15,6 +15,11 @@ import javax.json.JsonWriter;
 import treeStructure.BinarySearchTree;
 import treeStructure.BinaryTreeNode;
 /**
+ * dministración y presentación de listas de amigos, obteniendo los amigos del
+árbol binario de búsqueda que contiene el registro de usuarios,según el usuario
+que se encuentra en sesión. En clase friends, revisa y toma como parámetro el nombre 
+de usuario en sesión para ir a revisar el documento asociado al registro, toma la lista 
+de amigos de ese usuario del árbol
  * Clase encargada de gestionar los amigos que tenga el usuario en su registro
  * @author Sebastian Alba
  * @author David Pereira
