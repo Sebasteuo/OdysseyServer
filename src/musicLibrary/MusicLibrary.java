@@ -31,6 +31,7 @@ import com.mpatric.mp3agic.Mp3File;
 import Sorts.Sort;
 import treeStructure.AVLTree;
 import treeStructure.BTree;
+import treeStructure.SplayTree;
 
 public class MusicLibrary {
 	private JsonObjectBuilder objBuilder;
@@ -341,18 +342,17 @@ public class MusicLibrary {
 		String[] array = indexArtist.inorder();
 		String songs = "";
 		for (int i = 0; i < array.length; i++) {
-			JsonObject obj = Json.createReader(new StringReader(array[i])).readObject();
-			if (obj.getString("Artist").equalsIgnoreCase(artist)){
-				songs += obj.getString("Title") + "/";
-			}
+				JsonObject obj = Json.createReader(new StringReader(array[i])).readObject();
+				if (obj.getString("Artist").equalsIgnoreCase(artist)){					
+					songs += obj.getString("Title") + "/";
+				}
 		}
 		
 		if(songs != "") {
 			return songs;
 		}else {
 			return "false";
-		}
-		
+		}	
 	}
 	
 	public String getUserLibrary(String userName) throws Exception {

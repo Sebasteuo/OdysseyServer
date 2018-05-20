@@ -1,12 +1,9 @@
-import java.io.File;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Base64;
 import java.util.Scanner;
 import javax.json.JsonObject;
-
-import org.apache.commons.io.FileUtils;
 
 import musicLibrary.MusicLibrary;
 import social.Friends;

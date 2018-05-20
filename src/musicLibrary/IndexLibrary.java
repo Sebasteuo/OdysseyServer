@@ -62,8 +62,7 @@ public class IndexLibrary {
 				for (int i = 0; i < array.size(); i++) {
 					JsonObject obj = array.getJsonObject(i);
 					String artist = obj.getString("Artist");
-					System.out.println(artist);
-					this.artistIndex.insertNode(obj.toString(), artist);
+					this.artistIndex.insertNode( obj.toString(), artist+i);
 				}
 			}
 			fileReader.close();
@@ -83,8 +82,7 @@ public class IndexLibrary {
 				for (int i = 0; i < array.size(); i++) {
 					JsonObject obj = array.getJsonObject(i);
 					String album = obj.getString("Album");
-					System.out.println(album);
-					this.albumIndex.insertNode(obj.toString(), album);
+					this.albumIndex.insertNode(obj.toString(), album+i);
 				}
 			}
 			fileReader.close();

@@ -8,7 +8,7 @@ public class BinarySearchTree {
 		this.root = null;
 		this.size = 0;
 	}
-
+	
 	public void insertNode(String value, String key) {
 		this.root = insert(root, value, key);
 		this.size += 1;
@@ -49,10 +49,12 @@ public class BinarySearchTree {
 	public String findMin(BinaryTreeNode node) {
 		return node.getLeft() == null? node.getValue() : findMin(node.getLeft());
 	}
-		
+	
+	private String[] array;
     public String[] inorder(){
-    	String[] array = new String[size];
-        return inorder(root, array);
+    	array = new String[size];
+    	inorder(root);
+        return array;
     }
 
     public BinaryTreeNode rotateLeftLeft(BinaryTreeNode k2) {
@@ -83,17 +85,16 @@ public class BinarySearchTree {
 		return rotateRightRight(k3);
 	}
     
-    private int count = -1;
-    private String[] inorder(BinaryTreeNode r, String[] array){
+    private int count = 0;
+    private void inorder(BinaryTreeNode r){
         if (r != null){
-            inorder(r.getLeft(), array);
-            array[this.count] = r.getValue();
+            inorder(r.getLeft());
+            array[count++] = r.getValue();
             //System.out.print(r.getValue() +"\n");
-            inorder(r.getRight(), array);
-        }else {
-        	this.count++;
-        }        
-        return array;
+            inorder(r.getRight());
+        }else {    
+        	return;
+        }
     }
 
     private BinaryTreeNode insert(BinaryTreeNode root, String value, String key) {

@@ -4,12 +4,14 @@ public class SplayTree extends BinarySearchTree{
 	
 	public SplayTree() {
 		this.root = null;
+		this.size = 0;
 	}
 	
 	@Override
 	public void insertNode(String value, String key) {
 		if(root == null) {
 			root = new BinaryTreeNode(value, key);
+			this.size += 1;
 			return;
 		}
 		
@@ -22,6 +24,7 @@ public class SplayTree extends BinarySearchTree{
 			node.setRight(root);
 			root.setLeft(null);
 			root = node;
+			this.size += 1;
 		}
 		else if(comparisson > 0) {//Value es mayor que la raiz
 			BinaryTreeNode node = new BinaryTreeNode(value, key);
@@ -29,10 +32,12 @@ public class SplayTree extends BinarySearchTree{
 			node.setLeft(root);
 			root.setRight(null);
 			root = node;
+			this.size += 1;
 		}
 		else {//Value es igual que la raiz solo actualiza el valor
 			root.setKey(key);
 		}
+		
 	}
 	
 	@Override
