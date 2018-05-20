@@ -1,12 +1,8 @@
-import java.io.File;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Base64;
 import java.util.Scanner;
 import javax.json.JsonObject;
-
-import org.apache.commons.io.FileUtils;
 
 import social.Friends;
 import social.Recommendations;
@@ -18,15 +14,14 @@ import users.NewUser;
 public class Sockets {
 	@SuppressWarnings("resource")
 	public static void conectar(BinarySearchTree users) throws Exception {
-		ServerSocket serversocket = new ServerSocket(8000);
+		ServerSocket serversocket = new ServerSocket(6000);
 		System.out.println("Listo");
 		while (true) {
 			Socket client = serversocket.accept();
 			Scanner scanner = new Scanner(client.getInputStream());
 			PrintWriter pw = new PrintWriter(client.getOutputStream(), true);
-			System.out.println("hola");
 			String name = scanner.nextLine();
-			System.out.println("hola");
+			System.out.println(name);
 			if (name.substring(0, 1).equals("0")) {
 				ExistingUser a = new ExistingUser("", "", users);
 				String b = a.getExistingUserNames();
@@ -166,9 +161,6 @@ public class Sockets {
 				String validador = a.addFriends(friend);
 				String xml = "<"+validador+"> Se ha enviado el mensaje </"+validador+">";
 				pw.println(xml);
-			}if((name.substring(0,2)).equals("33")) {
-				byte[] buf = Base64.getDecoder().decode(name.substring(3, name.length()-2));
-				FileUtils.writeByteArrayToFile(new File("C:/Users/mende_000/Desktop/Extraclase/OdysseyServer/hola.mp3"),buf);
 			}
 			client.close();
 		}

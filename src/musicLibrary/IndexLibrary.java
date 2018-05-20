@@ -41,7 +41,8 @@ public class IndexLibrary {
 				reader.close();
 				for (int i = 0; i < array.size(); i++) {
 					JsonObject obj = array.getJsonObject(i);
-					this.titleIndex.insertNode(obj.toString());
+					String title = obj.getString("Title");
+					this.titleIndex.insertNode(title);
 				}
 			}
 			fileReader.close();
@@ -61,6 +62,7 @@ public class IndexLibrary {
 				for (int i = 0; i < array.size(); i++) {
 					JsonObject obj = array.getJsonObject(i);
 					String artist = obj.getString("Artist");
+					System.out.println(artist);
 					this.artistIndex.insertNode(obj.toString(), artist);
 				}
 			}
@@ -81,6 +83,7 @@ public class IndexLibrary {
 				for (int i = 0; i < array.size(); i++) {
 					JsonObject obj = array.getJsonObject(i);
 					String album = obj.getString("Album");
+					System.out.println(album);
 					this.albumIndex.insertNode(obj.toString(), album);
 				}
 			}
@@ -91,21 +94,7 @@ public class IndexLibrary {
 	}
 	
 	public BinarySearchTree createLyricsIndex() {
-		try {	
-			FileReader fileReader = new FileReader(folderPath + "davepj07\\MusicLibrary.json");
-			if(fileReader.ready()) {
-				InputStream IS = new FileInputStream(new File(folderPath + "davepj07\\MusicLibrary.json"));
-				JsonReader reader = Json.createReader(IS);
-				JsonArray array = reader.readArray();
-				reader.close();
-				for (int i = 0; i < array.size(); i++) {
-					JsonObject obj = array.getJsonObject(i);
-					String lyrics = obj.getString("Lyrics");
-					this.lyricsIndex.insertNode(obj.toString(), lyrics);
-				}
-			}
-			fileReader.close();
-		}catch(Exception ex) {}
+				
 		
 		return lyricsIndex;
 	}
