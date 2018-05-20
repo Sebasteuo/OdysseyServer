@@ -354,6 +354,25 @@ public class MusicLibrary {
 			return "false";
 		}	
 	}
+	public String searchByAlbum(String userName, String album) {
+		IndexLibrary index = new IndexLibrary();
+		SplayTree indexAlbum = index.createAlbumIndex();
+		String[] array = indexAlbum.inorder();
+		String songs = "";
+		for (int i = 0; i < array.length; i++) {
+			JsonObject obj = Json.createReader(new StringReader(array[i])).readObject();
+			if (obj.getString("Album").equalsIgnoreCase(album)){
+				songs += obj.getString("Title") + "/";
+			}
+		}
+		
+		if(songs != "") {
+			return songs;
+		}else {
+			return "false";
+		}
+		
+	}
 	
 	public String getUserLibrary(String userName) throws Exception {
 		String songs = "";
