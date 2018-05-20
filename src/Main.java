@@ -89,7 +89,7 @@ public class Main {
 		ExistingUser exUser = new ExistingUser("davepj07", "p455w0rd", users);
 		exUser.logIn();
 		
-		//Sockets.conectar(users);
+		Sockets.conectar(users);
 	  /*System.out.println(exUser.getExistingUserNames());
 		
 		Recommendations messages = new Recommendations(users);			  

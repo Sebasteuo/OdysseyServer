@@ -1,3 +1,5 @@
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -33,7 +35,7 @@ public class Sockets {
 	 * @throws Exception, para evitar que se caigan lo sockets
 	 */
 	public static void conectar(BinarySearchTree users) throws Exception {
-		ServerSocket serversocket = new ServerSocket(5000);
+		ServerSocket serversocket = new ServerSocket(3000);
 		System.out.println("Listo");
 		while (true) {
 			Socket client = serversocket.accept();
@@ -41,7 +43,7 @@ public class Sockets {
 			PrintWriter pw = new PrintWriter(client.getOutputStream(), true);
 			String name = scanner.nextLine();
 			if (name.substring(0, 1).equals("0")) {
-				ExistingUser a = new ExistingUser("", "", users);
+				ExistingUser a = new ExistingUser("", "", Main.loadFileInBST());
 				String b = a.getExistingUserNames();
 				String xml = "<b>" + b + "</b>";
 				pw.println(xml);
@@ -177,6 +179,28 @@ public class Sockets {
 				System.out.println(xml);
 				pw.println(xml);
 			}
+			if (name.substring(0, 2).equals("22")) {
+				MusicLibrary ml = new MusicLibrary();
+				String xml = "";
+				if (name.substring(2, 3).equals("1")) {
+					System.out.println("nombre");
+					xml = "<true>" + ml.searchByTitle(name.substring(4, name.length()-2)) + "</true>";
+				}
+				if (name.substring(2, 3).equals("2")) {
+					System.out.println("artista");
+					xml = "<true>" + ml.searchByArtist(name.substring(4, name.length()-2)) + "</true>";
+				}
+				if (name.substring(2, 3).equals("3")) {
+					System.out.println("album");
+					xml = "<true>" + ml.searchByAlbum(name.substring(4, name.length()-2)) + "</true>";
+				}
+				if (name.substring(2, 3).equals("4")) {
+					System.out.println("letra");
+					xml = "<true>" + ml.searchByLyrics(name.substring(4, name.length()-2)) + "</true>";
+				}
+				System.out.println(xml);
+				pw.println(xml);
+			}
 			if ((name.substring(0, 2)).equals("23")) {
 				String[] friend = new String[3];
 				int z = 0;
@@ -194,7 +218,7 @@ public class Sockets {
 				String xml = "<" + validador + "> Se ha enviado el mensaje </" + validador + ">";
 				pw.println(xml);
 			}
-			if ((name.substring(0, 2)).equals("33")) {
+			if ((name.substring(0, 2)).equals("13")) {
 				int u = 0;
 				int p = 0;
 				int g = 0;
@@ -211,10 +235,19 @@ public class Sockets {
 				}
 				String nick = name.substring(2, u);
 				String cancion = name.substring(u + 1, p);
-				System.out.println(nick + "/" + cancion);
 				byte[] buf = Base64.getDecoder().decode(name.substring(p + 1, name.length() - 2));
 				MusicLibrary ml = new MusicLibrary();
 				ml.storeSong(cancion, buf, nick);
+			}
+			if((name.substring(0, 2)).equals("33")) {
+				File file = new File("C:\\Users\\mende_000\\Documents\\MusicLibrary\\Principal\\No Love.mp3");
+				FileInputStream files = new FileInputStream(file);
+				byte [] buffer = new byte[files.available()];
+				files.read(buffer);
+				String enco = Base64.getEncoder().encode(buffer).toString();
+				String xml = enco;
+				pw.println(xml);
+				
 			}
 			client.close();
 		}
