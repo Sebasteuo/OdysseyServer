@@ -68,7 +68,7 @@ public class MusicLibrary {
 	 * @throws Exception
 	 */
 	public void storeSong(String songName, byte[] buf, String userName) throws Exception{
-		File song = new File(folderPath + "Principal\\" + songName + ".mp3"); //Crea el archivo donde se guardara la cancion
+		File song = new File(folderPath + "Principal\\" + songName); //Crea el archivo donde se guardara la cancion
 		File userSong = new File(folderPath + userName + "\\" + songName + ".mp3");
 		if(!song.exists()) { //Comprueba si la cancion ya existe en el directorio
 			FileUtils.writeByteArrayToFile(song, buf);
